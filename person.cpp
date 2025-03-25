@@ -1,10 +1,13 @@
 #include "person.h"
-#include <string>
-#include <vector>
 
 
 // Constructor
+
 Person::Person(){
+
+}
+
+Person::Person(std::string name, std::string id, Address location){
 
 
 }
@@ -12,10 +15,22 @@ Person::Person(){
 
 // Process file, divide to variables, create objects, save to vector, return it.
 std::vector<Person> Person::read_file(std::string filename){
-
     std::vector<Person> vectorOfPeeople;
 
+    std::string inputOne;
+    std::string inputTwo;
+    std::string inputThree;
+    std::string inputFour;
+    std::ifstream inputFile;
+    inputFile.open(filename);
 
+    while (!inputFile.eof()){
+
+        inputFile >> inputOne;
+     
+        std::cout << inputOne;
+        
+    }
 
     return vectorOfPeeople;
 
@@ -25,9 +40,9 @@ std::vector<Person> Person::read_file(std::string filename){
 size_t Person::find_in_names(const std::vector<Person> & haystack, std::string name_part){
 
 
+    std::size_t temp;
 
-
-
+    return temp;
 }
 
 // Find city, return vector of matches, else empty
@@ -36,7 +51,7 @@ std::vector<Person> Person::find_person_from_city(const std::vector<Person>& hay
 
 
 
-
+    return haystack;
 }
 
 
