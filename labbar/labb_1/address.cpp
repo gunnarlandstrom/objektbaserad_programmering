@@ -1,5 +1,4 @@
 #include "address.h"
-#include <string>
 
 
 // Constructor
@@ -9,7 +8,12 @@ Address::Address(){
 }
 
 
-Address::Address(std::string street, std::string city, int zip){
+Address::Address(std::string streetInput, std::string cityInput, int zipInput){
+
+    street = streetInput;
+    city = cityInput;
+    zip = zipInput;
+
 
 }
 

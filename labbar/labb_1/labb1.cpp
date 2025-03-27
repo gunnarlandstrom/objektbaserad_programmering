@@ -19,6 +19,8 @@ int main()
 
    personVector = program.read_file("names.txt");
 
+   printArray(personVector);
+
     
 
     return 0;

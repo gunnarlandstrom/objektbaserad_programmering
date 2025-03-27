@@ -45,5 +45,6 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "iostream": "cpp"
-    }
+    },
+    "makefile.makefilePath": "C:\\github\\miun\\objektbaserad_programmering\\labbar\\labb_1"
 }

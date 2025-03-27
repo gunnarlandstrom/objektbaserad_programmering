@@ -5,5 +5,5 @@ run: program
 	./program
 
 clean:
-	rm labb1
+	rm program
 
