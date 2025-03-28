@@ -1,27 +1,29 @@
 #include "person.h"
-#include "address.h"
 #include <iostream>
 #include <vector>
 
 int main()
 {
 
-    std::string filename;
     std::vector<Person> personVector;
+    int userChoice;
 
+    std::cout << "This is a program that searches a file after parts of a name or a city" << std::endl;
 
-    std::cout << "What file do you want to search?";
-    std::cin >> filename;
+    std::cout << "Do you want to search something?";
+    std::cin >> userChoice;
 
+    while (userChoice){
+        // Constructor
+        Person program;
+        personVector = read_file("names.txt");
 
-    // Constructor
-    Person program;
-
-   personVector = program.read_file("names.txt");
-
-   printArray(personVector);
-
+        std::cout << "What do you want to search for?" << std::endl;
+        std::cout << "[1] - a name." << std::endl;
+        std::cout << "[2] - a city." << std::endl;
+        
+    }
     
-
+    //printArray(personVector);
     return 0;
 }

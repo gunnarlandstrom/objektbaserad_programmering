@@ -1,7 +1,7 @@
 #include "person.h"
 
 // Process file, divide to variables, create objects, save to vector, return it.
-std::vector<Person> Person::read_file(std::string filename)
+std::vector<Person> read_file(std::string filename)
 {
     std::vector<Person> vectorOfPeople;
     Person personOne;
@@ -36,8 +36,21 @@ void printArray(std::vector<Person> array)
     }
 }
 
+bool wantsToSearch(int input)
+{
+    if (input == 1)
+    {
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 // Find names from object vector, return objects of matches, else empty
-size_t Person::find_in_names(const std::vector<Person> &haystack, std::string name_part)
+size_t find_in_names(const std::vector<Person> &haystack, std::string name_part)
 {
     std::size_t temp;
 
@@ -45,7 +58,7 @@ size_t Person::find_in_names(const std::vector<Person> &haystack, std::string na
 }
 
 // Find city, return vector of matches, else empty
-std::vector<Person> Person::find_person_from_city(const std::vector<Person> &haystack, std::string city)
+std::vector<Person> find_person_from_city(const std::vector<Person> &haystack, std::string city)
 {
     return haystack;
 }
@@ -104,10 +117,9 @@ std::istream &operator>>(std::istream &in, Person &p)
 
     p.name = tempName;
     p.id = tempId;
-    a.zip = tempZip;
-    a.street = tempAddress;
-    a.city = tempCity;
-    p.location = a;
+    p.location.zip = tempZip;
+    p.location.street = tempAddress;
+    p.location.city = tempCity;
 
     return in;
 }
