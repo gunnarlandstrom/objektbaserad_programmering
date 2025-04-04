@@ -6,12 +6,12 @@ std::vector<Person> read_file(std::string filename)
     std::vector<Person> vectorOfPeople;
     Person personOne;
     std::ifstream inputFile;
-    std::ofstream outputFile("test.txt");
     inputFile.open(filename);
 
     while (inputFile >> personOne)
     {
         vectorOfPeople.push_back(personOne);
+
     }
 
     return vectorOfPeople;
@@ -20,14 +20,17 @@ std::vector<Person> read_file(std::string filename)
 // Startmenu
 void startMenu()
 {
+    std::vector<Person> personVector;
+    personVector = read_file("names.txt");
     bool wantsToSearch;
     std::string userChoice;
-    std::cout << "This is a program that searches a file after parts of a name or a city" << std::endl;
+    std::cout << "This is a program that searches a file after parts of a name or a city" << '\n';
 
-    std::cout << "Do you want to search something?" << std::endl;
-    std::cout << "[1] - Yes" << std::endl;
-    std::cout << "[2] - No" << std::endl;
-    std::cin >> userChoice;
+    std::cout << "Do you want to search something?" << '\n';
+    std::cout << "Input:> ";
+    std::cout << "[1] - Yes" << '\n';
+    std::cout << "[2] - No" << '\n';
+    std::getline(std::cin, userChoice);
 
     if (userChoice == "1")
     {
@@ -35,7 +38,7 @@ void startMenu()
     }
     else
     {
-        std::cout << "Exiting program." << std::endl;
+        std::cout << "Exiting program." << '\n';
         wantsToSearch = false;
     }
 
@@ -43,56 +46,64 @@ void startMenu()
     {
         std::string wantedName;
         std::string wantedCity;
-        std::vector<Person> personVector;
-        personVector = read_file("names.txt");
 
-        std::cout << std::endl;
-        std::cout << "What do you want to search for?" << std::endl;
-        std::cout << "[1] - a name." << std::endl;
-        std::cout << "[2] - a city." << std::endl;
-        std::cout << "[3] - Exit." << std::endl;
-        std::cin >> userChoice;
+        std::cout << '\n';
+        std::cout << "What do you want to search for?" << '\n';
+        std::cout << "[1] - a name." << '\n';
+        std::cout << "[2] - a city." << '\n';
+        std::cout << "[3] - Exit." << '\n';
+        std::cout << "Input:> ";
+        std::getline(std::cin, userChoice);
 
         if (userChoice == "1")
         {
-            std::cout << "What name or partial name do you want to search for?" << std::endl;
-            std::cin >> wantedName;
-            std::cout << std::endl;
+            std::string tempTrash;
+            std::cout << "What name or partial name do you want to search for?" << '\n';
+            std::cout << "Input:> ";
+            std::getline(std::cin, wantedName);
+
             find_in_names(personVector, wantedName);
         }
         else if (userChoice == "2")
         {
             std::vector<Person> personsInCity;
-            std::cout << "What city do you want to search for?" << std::endl;
-            std::cin >> wantedCity;
-            std::cout << std::endl;
+            std::cout << "What city do you want to search for?" << '\n';
+            std::cout << "Input:> ";
+            std::getline(std::cin, wantedCity);
             personsInCity = find_person_from_city(personVector, wantedCity);
+            std::cout << "\n";
             printArray(personsInCity);
         }
         else
         {
-            std::cout << "Exiting program." << std::endl;
+            std::cout << "Exiting program." << '\n';
             wantsToSearch = false;
         }
     }
 }
 
-// Prints array
-void printArray(std::vector<Person> array)
+// Prints array of Person
+void printArray(std::vector<Person> &array)
 {
+    for (size_t i = 0; i < array.size(); i++)
+    {
+        Person tempPerson = array[i];
 
-    for (int i = 0; i < array.size(); i++)
+        std::cout << array[i].id << std::endl;
+        std::cout << array[i].name << std::endl;
+        std::cout << array[i].location.zip << std::endl;
+        std::cout << array[i].location.city << std::endl
+                  << std::endl;
+    }
+
+    /*
+    for (size_t j = 0; j < array.size(); j++)
     {
 
-        Person tempPerson = array[i];
-        Address tempAd = tempPerson.location;
-
-        std::cout << tempPerson.name << std::endl;
-        std::cout << tempPerson.id << std::endl;
-        std::cout << tempAd.street << std::endl;
-        std::cout << tempAd.zip << std::endl;
-        std::cout << tempAd.city << std::endl;
-    }
+    std::string wot = ", ";
+    std::cout << array[j].id << wot << array[j].name << wot << array[j].location.zip << wot << array[j].location.city << std::endl;
+}
+*/
 }
 
 // Find names from object vector, return objects of matches, else empty
@@ -105,8 +116,6 @@ size_t find_in_names(const std::vector<Person> &haystack, std::string name_part)
         name_part.at(i) = tolower(name_part.at(i));
     }
 
-    std::cout << name_part << std::endl;
-
     for (size_t i = 0; i < haystack.size(); i++)
     {
         std::string arrayName;
@@ -118,8 +127,6 @@ size_t find_in_names(const std::vector<Person> &haystack, std::string name_part)
         if (arrayName.find(name_part) != std::string::npos)
             temp++;
     }
-
-    std::cout << "Antal matchningar: " << temp << std::endl;
     return temp;
 }
 
@@ -146,7 +153,6 @@ std::vector<Person> find_person_from_city(const std::vector<Person> &haystack, s
 
 std::istream &operator>>(std::istream &in, Person &p)
 {
-    Address a;
     std::string tempName;
     std::string tempId;
     std::string tempAddress;
