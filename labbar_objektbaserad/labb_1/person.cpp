@@ -11,9 +11,9 @@ std::vector<Person> read_file(std::string filename)
     while (inputFile >> personOne)
     {
         vectorOfPeople.push_back(personOne);
-
     }
 
+    inputFile.close();
     return vectorOfPeople;
 }
 
@@ -27,9 +27,9 @@ void startMenu()
     std::cout << "This is a program that searches a file after parts of a name or a city" << '\n';
 
     std::cout << "Do you want to search something?" << '\n';
-    std::cout << "Input:> ";
     std::cout << "[1] - Yes" << '\n';
     std::cout << "[2] - No" << '\n';
+    std::cout << "Input:> ";
     std::getline(std::cin, userChoice);
 
     if (userChoice == "1")
@@ -99,11 +99,10 @@ void printArray(std::vector<Person> &array)
     /*
     for (size_t j = 0; j < array.size(); j++)
     {
-
-    std::string wot = ", ";
-    std::cout << array[j].id << wot << array[j].name << wot << array[j].location.zip << wot << array[j].location.city << std::endl;
-}
-*/
+        std::string wutIsHappening = ", ";
+        std::cout << array[j].id << wutIsHappening << array[j].name << wutIsHappening << array[j].location.zip << wutIsHappening << array[j].location.city << std::endl;
+    }
+    */
 }
 
 // Find names from object vector, return objects of matches, else empty
@@ -139,7 +138,6 @@ std::vector<Person> find_person_from_city(const std::vector<Person> &haystack, s
     {
         city.at(i) = toupper(city.at(i));
     }
-
     for (size_t i = 0; i < haystack.size(); i++)
     {
         if (haystack[i].location.city == city)
@@ -147,7 +145,6 @@ std::vector<Person> find_person_from_city(const std::vector<Person> &haystack, s
             personsInCity.push_back(haystack[i]);
         }
     }
-
     return personsInCity;
 }
 
