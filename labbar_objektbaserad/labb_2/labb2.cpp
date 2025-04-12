@@ -1,10 +1,10 @@
-#include "linkedList.h"
+#include "linkedlist.h"
 
-int main(){
+int main()
+{
+
+    linked_list listobject;
 
 
-
-
-    
     return 0;
 }

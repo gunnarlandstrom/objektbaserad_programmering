@@ -1,15 +1,20 @@
-#ifndef linkedList_H
-#define linkedList_H
+#ifndef LINKEDLIST_H
+#define LINKEDLIST_H
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <random>
 
 class linked_list {
 
+    public:
     linked_list();
     linked_list(const linked_list &src);
 
     ~linked_list();
+
+    // added functions
+    double randomNumber();
 
     linked_list& operator=(const linked_list &rhs);
 
