@@ -2,15 +2,38 @@
 
 int main()
 {
+    srand(time(0));
+    linked_list listOne;
+    linked_list listTwo;
+    linked_list listThree;
 
-    linked_list listobject;
-    listobject.push_back(1);
-    listobject.push_back(5);
-    listobject.push_back(8);
-    listobject.push_back(10);
+    // #1
+    listOne.generateList(10);
 
+    //std::cout << std::endl << "-------" << std::endl << std::endl;
+    
+    /*
+    listTwo.generateList();
+    listTwo.printList();
+    */
+   
+   // #2 at
+   //double atNumber = listOne.at(5);
+   //double atNumberTwo = listTwo.at(11);
+   
+   //remove
+   listThree.generateList(3);
+   listThree.printList();
+   
+   std::cout << std::endl << "-------" << std::endl << std::endl;
+   
+   listThree.remove(0);
+   listThree.remove(0);
+   listThree.remove(0);
+   
+   listThree.printList();
 
-    listobject.printList();
 
     return 0;
 }
+

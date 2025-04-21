@@ -2,6 +2,7 @@
 #define LINKEDLIST_H
 #include <string>
 #include <iostream>
+#include <random>
 
 class linked_list {
 
@@ -10,12 +11,13 @@ class linked_list {
     linked_list(const linked_list &src);
 
     ~linked_list();
-
+    
     
     // added functions
-    bool isEmpty();
     double randomNumber();
     void printList();
+    void generateList(size_t size);
+    
 
     //linked_list& operator=(const linked_list &rhs);
 
@@ -55,5 +57,4 @@ class linked_list {
     node* headNode = nullptr;
     node* tailNode = nullptr;
 };
-
 #endif
