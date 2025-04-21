@@ -78,7 +78,7 @@ void linked_list::printList()
 
     if (is_empty())
     {
-        std::cout << "List is empty!" << std::endl;
+        std::cout << "Error: Cannot print an empty list!" << std::endl;
         return;
     }
     do
@@ -105,7 +105,7 @@ double linked_list::at(size_t pos) const
 
     if (is_empty())
     {
-        std::cout << "The list is empty." << std::endl;
+        std::cout << "Unable to find an element at index: " << pos << ", the list is empty." << std::endl;
         return -1;
     }
 
@@ -133,7 +133,7 @@ void linked_list::remove(size_t pos)
 
     if (is_empty())
     {
-        std::cout << "The list is empty." << std::endl;
+        std::cout << "Unable to remove an element at index: "<< pos << ", from an empty list." << std::endl;
         return;
     }
 
@@ -150,14 +150,19 @@ void linked_list::remove(size_t pos)
         target = target->next;
         counter++;
     }
-    if (target == headNode)
+    if (target == headNode && target == tailNode)
     {
-        target->next = headNode;
+        headNode = nullptr;
+        tailNode = nullptr;
+    }
+    else if (target == headNode)
+    {
+        headNode = target->next;
         target->next->prev = nullptr;
     }
     else if (target == tailNode)
     {
-        target->prev = tailNode;
+        tailNode = target->prev;
         target->prev->next = nullptr;
     }
     else

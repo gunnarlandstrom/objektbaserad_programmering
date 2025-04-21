@@ -18,20 +18,25 @@ int main()
     */
    
    // #2 at
-   //double atNumber = listOne.at(5);
-   //double atNumberTwo = listTwo.at(11);
+   double atOne = listOne.at(5);
+   double atTwo = listTwo.at(5);
+
+   if (atOne < atTwo){
+    listTwo.remove(5);
+   } else {
+    listOne.remove(5);
+   }
    
    //remove
-   listThree.generateList(3);
-   listThree.printList();
-   
-   std::cout << std::endl << "-------" << std::endl << std::endl;
-   
-   listThree.remove(0);
-   listThree.remove(0);
-   listThree.remove(0);
+   listThree.generateList(10);
+   for (size_t i = 0; i < 11; i++)
+   {
+    listThree.remove(0);
+   }
    
    listThree.printList();
+   
+   
 
 
     return 0;
