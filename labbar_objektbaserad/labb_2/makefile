@@ -1,5 +1,5 @@
-programmet: labb2.cpp linkedList.cpp linkedList.h
-	g++ -o program labb2.cpp linkedList.cpp 
+program: main.cpp linkedlist.cpp linkedlist.h
+	g++ -o program main.cpp linkedlist.cpp 
 
 run: program
 	./program

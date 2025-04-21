@@ -3,37 +3,6 @@
 // Constructors
 linked_list::linked_list()
 {
-        node nodeOne(linked_list::randomNumber());
-        nodeOne.prev = head;
-        nodeOne.next = tail;
-        node nodeTwo(linked_list::randomNumber());
-        nodeOne.prev = nodeOne.prev;
-        nodeOne.next = tail;
-        node nodeThree(linked_list::randomNumber());
-        nodeOne.prev = nodeTwo.prev;
-        nodeOne.next = tail;
-        node nodeFour(linked_list::randomNumber());
-        nodeOne.prev = nodeThree.prev;
-        nodeOne.next = tail;
-        node nodeFive(linked_list::randomNumber());
-        nodeOne.prev = nodeFour.prev;
-        nodeOne.next = tail;
-        node nodeSix(linked_list::randomNumber());
-        nodeOne.prev = nodeFive.prev;
-        nodeOne.next = tail;
-        node nodeSeven(linked_list::randomNumber());
-        nodeOne.prev = nodeSix.prev;
-        nodeOne.next = tail;
-        node nodeEight(linked_list::randomNumber());
-        nodeOne.prev = nodeSeven.prev;
-        nodeOne.next = tail;
-        node nodeNine(linked_list::randomNumber());
-        nodeOne.prev = nodeEight.prev;
-        nodeOne.next = tail;
-        node nodeTen(linked_list::randomNumber());
-        nodeOne.prev = nodeNine.prev;
-        nodeOne.next = tail;
-
 }
 
 linked_list::linked_list(const linked_list &src)
@@ -66,7 +35,57 @@ void linked_list::insert(double value, size_t pos) {}
 
 void linked_list::push_front(double value) {}
 
-void linked_list::push_back(double value) {}
+void linked_list::push_back(double value)
+{
+    node *newNode = new node(value);
+
+    if (isEmpty())
+    {
+        headNode = newNode;
+        tailNode = newNode;
+    }
+    else
+    {
+        node *tempNode = tailNode;
+        tailNode = newNode;
+        newNode->prev = tempNode;
+        tempNode->next = newNode;
+    }
+}
+
+// Checks if linked list is empty
+bool linked_list::isEmpty()
+{
+    if (headNode == nullptr && tailNode == nullptr)
+    {
+        return true;
+    }
+    else
+    {
+
+        return false;
+    }
+}
+
+// Prints linked_list
+void linked_list::printList()
+{
+    node *tempNode;
+    tempNode = headNode;
+
+    if (isEmpty())
+    {
+        std::cout << "List is empty!" << std::endl;
+        return;
+    }
+
+    do
+    {
+
+        std::cout << tempNode->value << std::endl;
+        tempNode = tempNode->next;
+    } while (tempNode != nullptr);
+}
 
 // Accessing elements
 double linked_list::front() const
@@ -107,10 +126,9 @@ bool linked_list::is_empty() const
 }
 
 // Output
-void linked_list::print() const {
-
+void linked_list::print() const
+{
 }
-
 
 void linked_list::print_reverse() const {}
 
@@ -120,14 +138,15 @@ double linked_list::randomNumber()
     double temp = 0.0;
     double tempTwo = 0.0;
 
-    while (temp == 0){
-    srand(time(0));
-    temp = rand() % 11;
-    randomNumber = rand() % 10;
+    while (temp == 0)
+    {
+        srand(time(0));
+        temp = rand() % 11;
+        randomNumber = rand() % 10;
 
-    tempTwo =+ (randomNumber / 10);
+        tempTwo = +(randomNumber / 10);
 
-    temp = temp + tempTwo;
+        temp = temp + tempTwo;
     }
 
     return randomNumber;
@@ -136,4 +155,6 @@ double linked_list::randomNumber()
 linked_list::node::node(double value)
 {
     this->value = value;
+    this->next = nullptr;
+    this->prev = nullptr;
 }
