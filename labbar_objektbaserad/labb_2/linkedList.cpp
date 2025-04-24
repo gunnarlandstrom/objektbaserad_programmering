@@ -109,11 +109,38 @@ void linked_list::printList()
 // Accessing elements
 double linked_list::front() const
 {
-    return 1.0;
+    double counter = 0;
+    node *tempNode = this->headNode;
+
+    if (is_empty())
+    {
+        std::cout << "Error: Cannot access the front of an empty list." << std::endl;
+        return -1;
+    }
+    else
+    {
+        return this->headNode->value;
+    }
 }
 double linked_list::back() const
 {
-    return 1.0;
+    double counter = 0;
+    node *tempNode = this->headNode;
+
+    if (is_empty())
+    {
+        std::cout << "Error: Cannot access the back of an empty list." << std::endl;
+        return -1;
+    }
+    else
+    {
+        do
+        {
+            counter++;
+            tempNode = tempNode->next;
+        } while (tempNode->next != nullptr);
+    }
+    return tempNode->value;
 }
 
 // Done.
@@ -156,7 +183,7 @@ void linked_list::remove(size_t pos)
     }
 
     node *target;
-    target = headNode;
+    target = this->headNode;
 
     while (counter != pos)
     {
@@ -168,6 +195,7 @@ void linked_list::remove(size_t pos)
         target = target->next;
         counter++;
     }
+    std::cout << "This is counter: " << counter << " And this is position: " << pos << std::endl;
     if (target == headNode && target == tailNode)
     {
         headNode = nullptr;
@@ -191,32 +219,19 @@ void linked_list::remove(size_t pos)
     delete target;
 }
 
-/*
-}
-if (tempNode->prev == nullptr)
-{
-    tempNode->next = headNode;
-    delete tempNode;
-}
-else if (tempNode->next == nullptr)
-{
-    tempNode->prev = tailNode;
-    delete tempNode;
-}
-else
-{
-    tempNode->next->prev = tempNode->prev;
-    tempNode->prev->next = tempNode->next;
-    delete tempNode;
-*/
-
 double linked_list::pop_front()
 {
-    return 2.0;
+    double tempValue = this->headNode->value;
+    remove(this->front());
+    return tempValue;
 }
 double linked_list::pop_back()
 {
-    return 2.0;
+    node *tempNode = tailNode;
+    tailNode = tempNode->prev;
+    tailNode->next = nullptr;
+
+    return tempNode->value;
 }
 
 // Status
