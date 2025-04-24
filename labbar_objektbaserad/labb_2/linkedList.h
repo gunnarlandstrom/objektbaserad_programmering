@@ -19,7 +19,7 @@ class linked_list {
     void generateList(size_t size);
     
 
-    //linked_list& operator=(const linked_list &rhs);
+    linked_list& operator=(const linked_list &rhs);
 
     //appneds elements from rhs
     //linked_list& operator+=(const linked_list &rhs);

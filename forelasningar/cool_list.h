@@ -18,7 +18,7 @@ public:
     void push_back(double value);
     void print_list();
 
-    //Inlince funktion anropas direkt
+    //Inline funktion anropas direkt
     inline bool isEmpty() { return head == nullptr; };
 
 private:

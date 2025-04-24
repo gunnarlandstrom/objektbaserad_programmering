@@ -15,14 +15,32 @@ linked_list::~linked_list()
 {
 }
 
-/*
-//appends elements from rhs
-linked_list& linked_list::operator=(const linked_list &rhs){
+linked_list &linked_list::operator=(const linked_list &rhs)
+{
 
-linked_list tempListOne = rhs;
-return tempListOne;
+    node *tempNode = rhs.headNode;
+    if (this != &rhs)
+    {
+        while (this->headNode != nullptr)
+        {
+            this->remove(0);
+        }
+        do
+        {
+            this->push_back(tempNode->value);
+            tempNode = tempNode->next;
+        } while (tempNode != nullptr);
+    }
+    else
+    {
+        std::cout << "Error: Trying to self assign the list to itself" << std::endl;
+        return *this;
+    }
+    return *this;
 }
 
+/*
+//appends elements from rhs
 linked_list& linked_list::operator+=(const linked_list &rhs){
 
 linked_list tempListTwo = rhs;
@@ -133,7 +151,7 @@ void linked_list::remove(size_t pos)
 
     if (is_empty())
     {
-        std::cout << "Unable to remove an element at index: "<< pos << ", from an empty list." << std::endl;
+        std::cout << "Unable to remove an element at index: " << pos << ", from an empty list." << std::endl;
         return;
     }
 

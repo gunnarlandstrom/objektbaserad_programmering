@@ -41,7 +41,6 @@ head = nullptr;
 
 //Loopa push_back(...) över src för deep copy
 
-
 }
 
 // CHECK OUT *COPY AND SWAP*
@@ -59,7 +58,6 @@ cool_list& cool_list::operator=(const cool_list& rhs){
 
     return *this;
 }
-
 
 void cool_list::print_list()
 {
