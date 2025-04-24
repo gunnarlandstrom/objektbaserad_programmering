@@ -7,14 +7,19 @@ linked_list::linked_list()
 
 linked_list::linked_list(const linked_list &src)
 {
-    // TBD
+    node *tempNode = src.headNode;
+    while (tempNode != nullptr){
+        this->push_back(tempNode->value);
+        tempNode = tempNode->next;
+    }
 }
 
-// destructor?
+// destructor
 linked_list::~linked_list()
 {
 }
 
+//
 linked_list &linked_list::operator=(const linked_list &rhs)
 {
 
@@ -86,24 +91,6 @@ void linked_list::push_back(double value)
         newNode->prev = tempNode;
         tempNode->next = newNode;
     }
-}
-
-// Prints linked_list
-void linked_list::printList()
-{
-    node *tempNode;
-    tempNode = headNode;
-
-    if (is_empty())
-    {
-        std::cout << "Error: Cannot print an empty list!" << std::endl;
-        return;
-    }
-    do
-    {
-        std::cout << tempNode->value << std::endl;
-        tempNode = tempNode->next;
-    } while (tempNode != nullptr);
 }
 
 // Accessing elements
@@ -221,16 +208,16 @@ void linked_list::remove(size_t pos)
 
 double linked_list::pop_front()
 {
-    double tempValue = this->headNode->value;
-    remove(this->front());
-    return tempValue;
+    node *tempNode = headNode;
+    headNode = tempNode->next;
+    headNode->prev = nullptr;
+    return tempNode->value;
 }
 double linked_list::pop_back()
 {
     node *tempNode = tailNode;
     tailNode = tempNode->prev;
     tailNode->next = nullptr;
-
     return tempNode->value;
 }
 
@@ -257,9 +244,37 @@ bool linked_list::is_empty() const
 // Output
 void linked_list::print() const
 {
+    node *tempNode;
+    tempNode = headNode;
+
+    if (is_empty())
+    {
+        std::cout << "Error: Cannot print an empty list!" << std::endl;
+        return;
+    }
+    do
+    {
+        std::cout << tempNode->value << std::endl;
+        tempNode = tempNode->next;
+    } while (tempNode != nullptr);
 }
 
-void linked_list::print_reverse() const {}
+void linked_list::print_reverse() const
+{
+    node *tempNode;
+    tempNode = tailNode;
+
+    if (is_empty())
+    {
+        std::cout << "Error: Cannot print an empty list!" << std::endl;
+        return;
+    }
+    do
+    {
+        std::cout << tempNode->value << std::endl;
+        tempNode = tempNode->prev;
+    } while (tempNode != nullptr);
+}
 
 double linked_list::randomNumber()
 {
@@ -276,13 +291,13 @@ double linked_list::randomNumber()
     /*if (temp == 10)
     {
         return temp;
-    }
-    randomNumber = rand() % 10;
+        }
+        randomNumber = rand() % 10;
 
-    tempTwo = +(randomNumber / 10);
+        tempTwo = +(randomNumber / 10);
 
-    temp = temp + tempTwo;
-    */
+        temp = temp + tempTwo;
+        */
     return temp;
 }
 

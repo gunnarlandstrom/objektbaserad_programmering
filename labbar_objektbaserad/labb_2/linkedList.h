@@ -15,7 +15,6 @@ class linked_list {
     
     // added functions
     double randomNumber();
-    void printList();
     void generateList(size_t size);
     
 
@@ -57,4 +56,7 @@ class linked_list {
     node* headNode = nullptr;
     node* tailNode = nullptr;
 };
+
+void print_list(linked_list list);
+
 #endif

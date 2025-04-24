@@ -9,7 +9,7 @@ int main()
 
     // #1
     listOne.generateList(10);
-    listOne.printList();
+    listOne.print();
 
     std::cout << std::endl
               << "-------" << std::endl
@@ -17,7 +17,7 @@ int main()
 
     listTwo.generateList(10);
 
-    listTwo.printList();
+    listTwo.print();
 
     std::cout << std::endl
               << "-------" << std::endl
@@ -30,31 +30,31 @@ int main()
     if (atOne < atTwo)
     {
         listTwo.remove(5);
-        listTwo.printList();
+        listTwo.print();
         listThree = listTwo;
     }
     else
     {
 
         listOne.remove(5);
-        listOne.printList();
+        listOne.print();
         listThree = listOne;
     }
 
     std::cout << std::endl;
     listThree = listThree;
-    
-    
+
     std::cout << std::endl
               << "-------" << std::endl
               << std::endl;
-    /*
-    listThree.printList();
+
+    std::cout << "This is reverse print!" << std::endl;
+    listThree.print_reverse();
 
     std::cout << std::endl
     << "-------" << std::endl
     << std::endl;
-    */
+    
 
     // #4 pop_back, push_front
     if (atOne > atTwo)
@@ -64,7 +64,7 @@ int main()
             listTwo.pop_back();
             listTwo.push_front(listTwo.pop_back());
         }
-        listTwo.printList();
+        listTwo.print();
     }
     else
     {
@@ -73,10 +73,29 @@ int main()
             listOne.pop_back();
             listOne.push_front(listOne.pop_back());
         }
-        listOne.printList();
+        listOne.print();
     }
 
-    // #5
+    std::cout << std::endl
+              << "-------" << std::endl
+              << std::endl;
+
+    std::cout << "This is the global print! " << std::endl;
+    // #5 Print_list Global
+    if (atOne > atTwo)
+    {
+        print_list(listTwo);
+    }
+    else
+    {
+        print_list(listOne);
+    }
 
     return 0;
+}
+
+// Global print
+void print_list(linked_list list)
+{
+    list.print();
 }
