@@ -57,6 +57,8 @@ class linked_list {
     node* tailNode = nullptr;
 };
 
+// Globala grejer
+linked_list merge(linked_list&, linked_list&);
 void print_list(linked_list list);
 
 #endif

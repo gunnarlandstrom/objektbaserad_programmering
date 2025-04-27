@@ -318,3 +318,25 @@ void linked_list::generateList(size_t size)
         this->push_back(number);
     }
 }
+
+// Global function print
+void print_list(linked_list list)
+{
+    list.print();
+}
+
+// Global function merge
+linked_list merge(linked_list& refOne, linked_list& refTwo) {
+
+    linked_list mergedList;
+
+    while (refOne.front() || refTwo.front()){
+
+
+    }
+
+    linked_list tempList;
+
+    
+    return mergedList;
+}

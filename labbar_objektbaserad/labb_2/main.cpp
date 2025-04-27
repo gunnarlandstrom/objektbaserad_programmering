@@ -8,15 +8,17 @@ int main()
     linked_list listThree;
 
     // #1
+    std::cout << "First list!" << std::endl;
     listOne.generateList(10);
     listOne.print();
-
+    
     std::cout << std::endl
-              << "-------" << std::endl
-              << std::endl;
-
+    << "-------" << std::endl
+    << std::endl;
+    
+    
+    std::cout << "Second list!" << std::endl;
     listTwo.generateList(10);
-
     listTwo.print();
 
     std::cout << std::endl
@@ -57,16 +59,7 @@ int main()
     
 
     // #4 pop_back, push_front
-    if (atOne > atTwo)
-    {
-        for (size_t i = 0; i < 5; i++)
-        {
-            listTwo.pop_back();
-            listTwo.push_front(listTwo.pop_back());
-        }
-        listTwo.print();
-    }
-    else
+    if (atOne < atTwo)
     {
         for (size_t i = 0; i < 5; i++)
         {
@@ -75,6 +68,15 @@ int main()
         }
         listOne.print();
     }
+    else
+    {
+        for (size_t i = 0; i < 5; i++)
+        {
+            listTwo.pop_back();
+            listTwo.push_front(listTwo.pop_back());
+        }
+        listTwo.print();
+    }
 
     std::cout << std::endl
               << "-------" << std::endl
@@ -82,20 +84,17 @@ int main()
 
     std::cout << "This is the global print! " << std::endl;
     // #5 Print_list Global
-    if (atOne > atTwo)
-    {
-        print_list(listTwo);
-    }
-    else
+    if (atOne < atTwo)
     {
         print_list(listOne);
     }
+    else
+    {
+        print_list(listTwo);
+    }
+
+    linked_list mergedList = merge(listOne, listTwo);
 
     return 0;
 }
 
-// Global print
-void print_list(linked_list list)
-{
-    list.print();
-}
