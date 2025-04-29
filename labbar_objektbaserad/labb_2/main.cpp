@@ -11,12 +11,11 @@ int main()
     std::cout << "First list!" << std::endl;
     listOne.generateList(10);
     listOne.print();
-    
+
     std::cout << std::endl
-    << "-------" << std::endl
-    << std::endl;
-    
-    
+              << "-------" << std::endl
+              << std::endl;
+
     std::cout << "Second list!" << std::endl;
     listTwo.generateList(10);
     listTwo.print();
@@ -54,9 +53,8 @@ int main()
     listThree.print_reverse();
 
     std::cout << std::endl
-    << "-------" << std::endl
-    << std::endl;
-    
+              << "-------" << std::endl
+              << std::endl;
 
     // #4 pop_back, push_front
     if (atOne < atTwo)
@@ -92,9 +90,48 @@ int main()
     {
         print_list(listTwo);
     }
+    for (size_t i = 0; i < 20; i++)
+    {
+        std::cout << " \n";
+    }
 
+    std::cout << "List One! " << std::endl;
+    listOne.print();
+    std::cout << "List Two! " << std::endl;
+    listTwo.print();
     linked_list mergedList = merge(listOne, listTwo);
+
+    std::cout << std::endl
+              << "-------" << std::endl
+              << std::endl;
+
+    std::cout << "This is the mergedList: " << std::endl;
+    mergedList.print();
+
+    isSorted(mergedList);
+
+    std::cout << std::endl
+              << "-------" << std::endl
+              << std::endl;
+
+    mergedList.push_back(2);
+    isSorted(mergedList);
+
+    linked_list pushFront;
+    pushFront.generateList(10);
+
+    std::cout << std::endl
+              << "-------" << std::endl
+              << std::endl;
+    for (int i = 0; i < 10; i++)
+    {
+        pushFront.push_back(pushFront.at(9));
+        pushFront.pop_front();
+    }
+    pushFront.print();
+
+    std::cout << "Big to small: " << std::endl;
+    isSorted(pushFront);
 
     return 0;
 }
-

@@ -21,7 +21,7 @@ class linked_list {
     linked_list& operator=(const linked_list &rhs);
 
     //appneds elements from rhs
-    //linked_list& operator+=(const linked_list &rhs);
+    linked_list& operator+=(const linked_list &rhs);
 
     //Inserting elements
     void insert(double value, size_t pos);
@@ -60,5 +60,6 @@ class linked_list {
 // Globala grejer
 linked_list merge(linked_list&, linked_list&);
 void print_list(linked_list list);
+bool isSorted(linked_list& list);
 
 #endif

@@ -8,7 +8,8 @@ linked_list::linked_list()
 linked_list::linked_list(const linked_list &src)
 {
     node *tempNode = src.headNode;
-    while (tempNode != nullptr){
+    while (tempNode != nullptr)
+    {
         this->push_back(tempNode->value);
         tempNode = tempNode->next;
     }
@@ -44,14 +45,18 @@ linked_list &linked_list::operator=(const linked_list &rhs)
     return *this;
 }
 
-/*
-//appends elements from rhs
-linked_list& linked_list::operator+=(const linked_list &rhs){
+// appends elements from rhs
+linked_list &linked_list::operator+=(const linked_list &rhs)
+{
 
-linked_list tempListTwo = rhs;
-return tempListTwo;
+    node *tempNode = rhs.headNode;
+    while (tempNode != nullptr)
+    {
+        this->push_back(tempNode->value);
+        tempNode = tempNode->next;
+    }
+    return *this;
 }
-*/
 
 // Inserting elements
 void linked_list::insert(double value, size_t pos) {}
@@ -99,9 +104,9 @@ double linked_list::front() const
     double counter = 0;
     node *tempNode = this->headNode;
 
-    if (is_empty())
+    if (tempNode == nullptr)
     {
-        std::cout << "Error: Cannot access the front of an empty list." << std::endl;
+        std::cout << "Error: Cannot access the front of an empty list!" << std::endl;
         return -1;
     }
     else
@@ -114,7 +119,7 @@ double linked_list::back() const
     double counter = 0;
     node *tempNode = this->headNode;
 
-    if (is_empty())
+    if (tempNode == nullptr)
     {
         std::cout << "Error: Cannot access the back of an empty list." << std::endl;
         return -1;
@@ -146,9 +151,9 @@ double linked_list::at(size_t pos) const
 
     while (counter != pos)
     {
-        if (tempNode->next == nullptr)
+        if (tempNode == nullptr)
         {
-            std::cout << "Position out of scope at index: " << counter << std::endl;
+            std::cout << "Position out of scope at index: " << counter << " " << pos << std::endl;
             return -1;
         }
         tempNode = tempNode->next;
@@ -182,7 +187,6 @@ void linked_list::remove(size_t pos)
         target = target->next;
         counter++;
     }
-    std::cout << "This is counter: " << counter << " And this is position: " << pos << std::endl;
     if (target == headNode && target == tailNode)
     {
         headNode = nullptr;
@@ -208,9 +212,17 @@ void linked_list::remove(size_t pos)
 
 double linked_list::pop_front()
 {
+
     node *tempNode = headNode;
+    if (tempNode->next == nullptr)
+    {
+        headNode = nullptr;
+        tailNode = nullptr;
+        return tempNode->value;
+    }
     headNode = tempNode->next;
     headNode->prev = nullptr;
+
     return tempNode->value;
 }
 double linked_list::pop_back()
@@ -288,16 +300,7 @@ double linked_list::randomNumber()
     }
 
     temp = rand() % 11;
-    /*if (temp == 10)
-    {
-        return temp;
-        }
-        randomNumber = rand() % 10;
 
-        tempTwo = +(randomNumber / 10);
-
-        temp = temp + tempTwo;
-        */
     return temp;
 }
 
@@ -326,17 +329,103 @@ void print_list(linked_list list)
 }
 
 // Global function merge
-linked_list merge(linked_list& refOne, linked_list& refTwo) {
+linked_list merge(linked_list &refOne, linked_list &refTwo)
+{
 
     linked_list mergedList;
-
-    while (refOne.front() || refTwo.front()){
-
-
+    if (refOne.is_empty() && refTwo.is_empty())
+    {
+        return mergedList;
     }
+    while (!refOne.is_empty() || !refTwo.is_empty())
+    {
+        if (refOne.is_empty())
+        {
+            while (!refTwo.is_empty())
+            {
+                mergedList.push_back(refTwo.front());
+                refTwo.pop_front();
+            }
+            return mergedList;
+        }
+        else if (refTwo.is_empty())
+        {
+            while (!refOne.is_empty())
+            {
+                mergedList.push_back(refOne.front());
+                refOne.pop_front();
+            }
+            return mergedList;
+        }
+        else
+        {
+            if (refOne.front() <= refTwo.front())
+            {
+                mergedList.push_back(refOne.front());
+                refOne.pop_front();
+            }
+            else if (refTwo.front() < refOne.front())
+            {
+                mergedList.push_back(refTwo.front());
+                refTwo.pop_front();
+            }
+        }
+    }
+    /*
+    if (!refOne.is_empty()){
+        mergedList += refOne;
+    } else if (!refTwo.is_empty()){
+        mergedList += refTwo;
+    }
+    */
 
-    linked_list tempList;
-
-    
     return mergedList;
+}
+
+bool isSorted(linked_list &list)
+{
+
+    int counter = 0;
+
+    if (list.is_empty())
+    {
+        std::cout << "Empty lists are always sorted." << std::endl;
+        return true;
+    }
+    else
+    {
+        if (list.front() < list.back())
+        {
+            while (list.at(counter) != list.back())
+            {
+                if (list.at(counter) <= list.at(counter + 1))
+                {
+                    counter++;
+                }
+                else
+                {
+                    std::cout << "List is not sorted!" << std::endl;
+                    return false;
+                }
+            }
+            std::cout << "List is sorted from small to large numbers!" << std::endl;
+        }
+        else if (list.front() > list.back())
+        {
+            while (list.at(counter) != list.front())
+            {
+                if (list.at(counter) >= list.at(counter + 1))
+                {
+                    counter++;
+                }
+                else
+                {
+                    std::cout << "List is not sorted!" << std::endl;
+                    return false;
+                }
+            }
+            std::cout << "List is sorted from large to small numbers!" << std::endl;
+        }
+    }
+    return true;
 }
