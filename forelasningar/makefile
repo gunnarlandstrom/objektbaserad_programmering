@@ -1,5 +1,5 @@
-program: f6_cool_list.cpp cool_list.cpp cool_list.h
-	g++ -o program f6_cool_list.cpp cool_list.cpp
+program: f7_main.cpp exception.cpp exception.h
+	g++ -o program f7_main.cpp exception.cpp
 
 run: program
 	./program

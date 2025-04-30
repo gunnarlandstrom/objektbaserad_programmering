@@ -53,13 +53,9 @@ class linked_list {
         node* next;
         node* prev;
     };
-    node* headNode = nullptr;
-    node* tailNode = nullptr;
+    node* headNode;
+    node* tailNode;
 };
 
-// Globala grejer
-linked_list merge(linked_list&, linked_list&);
-void print_list(linked_list list);
-bool isSorted(linked_list& list);
 
 #endif
