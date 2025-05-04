@@ -6,7 +6,7 @@ int main()
 
     try
     {
-        labyrinth mylab2(11, 11);
+        labyrinth mylab2(13, 13);
         mylab2.print();
     }
     catch (const std::exception &e)

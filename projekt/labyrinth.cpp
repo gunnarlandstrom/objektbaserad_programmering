@@ -43,13 +43,13 @@ void labyrinth::markStart()
 
 void labyrinth::markEnd()
 {
-    myMaze[10][9].flag = "E";
-    myMaze[10][9].isWall = false;
+    myMaze[height-1][width-2].flag = "E";
+    myMaze[height-1][width-2].isWall = false;
 }
 
 bool labyrinth::canMove(int row, int col)
 {
-    
+    return 0;
 }
 
 char labyrinth::randomizeDirection()
@@ -68,7 +68,7 @@ void labyrinth::print()
 
         for (size_t row = 0; row < this->height; row++)
         {
-            std::cout << myMaze[col][row].flag;
+            std::cout << myMaze[col][row].flag << " ";
         }
         std::cout << std::endl;
     }
