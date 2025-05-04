@@ -257,7 +257,6 @@ linked_list merge(linked_list &refOne, linked_list &refTwo)
 // Global function print
 void print_list(linked_list list)
 {
-    std::cout << "CRASH? PRINT " << std::endl;
     list.print();
 }
 

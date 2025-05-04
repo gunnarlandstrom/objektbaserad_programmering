@@ -28,7 +28,7 @@ linked_list::~linked_list()
     }
 }
 
-//
+// This = that
 linked_list &linked_list::operator=(const linked_list &rhs)
 {
 
@@ -48,17 +48,19 @@ linked_list &linked_list::operator=(const linked_list &rhs)
     return *this;
 }
 
-// appends elements from rhs
+// This = This+That
 linked_list &linked_list::operator+=(const linked_list &rhs)
 {
 
     size_t size = rhs.size();
-    std::cout << "SIZE YAO:" << size << std::endl;
-    node *tempNode = rhs.headNode;
-    for (size_t i = 0; i < size; i++)
+    int counter = 0;
+    node *tempNode = headNode;
+
+    while (counter != size)
     {
-        this->push_back(tempNode->value);
+        push_back(tempNode->value);
         tempNode = tempNode->next;
+        counter++;
     }
     return *this;
 }
@@ -75,7 +77,7 @@ void linked_list::insert(double value, size_t pos)
     {
         if (tempNode->next == nullptr)
         {
-            std::cout << "Error: Position out of scope!" << std::endl;
+            std::cout << "Error: Position out of scope! at index: " << counter << std::endl;
             return;
         }
         tempNode = tempNode->next;
@@ -95,14 +97,21 @@ void linked_list::insert(double value, size_t pos)
     }
     else if (tempNode == tailNode && tempNode == headNode)
     {
-        push_front(insertNode->value);
+        insertNode = tailNode;
+        insertNode->prev = tempNode;
+        insertNode->next = nullptr;
+        tempNode->next = insertNode;
     }
-    else {
-        
+    else
+    {
+        tempNode->prev->next = insertNode;
+        insertNode->prev = tempNode->prev;
+        insertNode->next = tempNode;
+        tempNode->prev = insertNode;
     }
 }
 
-// Done
+// Push Front
 void linked_list::push_front(double value)
 {
     node *newNode = new node(value);
@@ -120,7 +129,7 @@ void linked_list::push_front(double value)
     }
 }
 
-// Done
+// Push back
 void linked_list::push_back(double value)
 {
     node *newNode = new node(value);
@@ -248,30 +257,61 @@ void linked_list::remove(size_t pos)
         target->prev->next = target->next;
         target->next->prev = target->prev;
     }
+    // Needed?
+    // target->next = nullptr;
+    // target->prev = nullptr;
     delete target;
 }
 
 double linked_list::pop_front()
 {
-
+    double tempValue = 0;
     node *tempNode = headNode;
-    if (tempNode->next == nullptr)
+    if (tempNode == nullptr){
+        std::cout << "Cannot pop an element from the front of nothing! " << std::endl;
+        return -1;
+    }
+    else if (tempNode->next == nullptr)
     {
         headNode = nullptr;
         tailNode = nullptr;
-        return tempNode->value;
+        tempValue = tempNode->value;
+        delete tempNode;
+        return tempValue;
     }
     headNode = tempNode->next;
-    headNode->prev = nullptr;
+    tempNode->next->prev = nullptr;
 
-    return tempNode->value;
+    // ??
+    // tempNode->next = nullptr;
+    delete tempNode;
+    return tempValue;
 }
 double linked_list::pop_back()
 {
+    double tempValue = 0;
     node *tempNode = tailNode;
+
+    if ( tempNode == nullptr ){
+        std::cout << "Cannot pop an element from the back of nothing! " << std::endl;
+        return -1;
+    }
+    else if (tempNode->prev == nullptr){
+        headNode = nullptr;
+        tempNode = nullptr;
+        tempValue = tempNode->value;
+        delete tempNode;
+        return tempValue;
+    }
+
     tailNode = tempNode->prev;
-    tailNode->next = nullptr;
-    return tempNode->value;
+    tempNode->prev->next = nullptr;
+    tempValue = tempNode->value;
+
+    // ??
+    // tempNode->prev = nullptr;
+    delete tempNode;
+    return tempValue;
 }
 
 // Status
@@ -307,7 +347,7 @@ void linked_list::print() const
 
     if (is_empty())
     {
-        std::cout << "Error: Cannot print an empty list!" << std::endl;
+        std::cout << "Cannot print an empty list!" << std::endl;
         return;
     }
     while (tempNode != nullptr)
@@ -324,7 +364,7 @@ void linked_list::print_reverse() const
 
     if (is_empty())
     {
-        std::cout << "Error: Cannot print an empty list!" << std::endl;
+        std::cout << "Cannot print an empty list in reverse!" << std::endl;
         return;
     }
     do
