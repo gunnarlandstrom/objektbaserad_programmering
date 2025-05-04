@@ -3,34 +3,31 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "tile.h"
+#include <random>
 
-class labyrinth{
-
-
+class labyrinth
+{
+public:
     labyrinth();
 
     labyrinth(size_t width, size_t height);
+    void markStart();
+    void markEnd();
+    char randomizeDirection();
+    bool canMove(int row, int col);
+
+    void initialize();
 
     ~labyrinth();
 
-    void generateLabyrinth();
 
-    void print() const;
-
-
-
-    struct node {
-        node(bool visited);
-        bool visited;
-        node* north;
-        node* south;
-        node* east;
-        node* west;
-    };
-    node* startNode;
-    node* endNode;
+    void print();
+    
+    private:
+    size_t width;
+    size_t height;
+    std::vector<std::vector<tile>> myMaze;
 };
-
-
 
 #endif

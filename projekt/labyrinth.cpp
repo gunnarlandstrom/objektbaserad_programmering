@@ -1,25 +1,75 @@
 #include "labyrinth.h"
+#include "tile.h"
 
 labyrinth::labyrinth()
 {
+    width = 7;
+    height = 7;
+    initialize();
 }
 
-labyrinth::labyrinth(size_t width, size_t height){
-    
+labyrinth::labyrinth(size_t width, size_t height)
+{
+    this->width = width;
+    this->height = height;
+    initialize();
+}
+
+void labyrinth::initialize()
+{
+    for (size_t col = 0; col < this->width; col++)
+    {
+        std::vector<tile> heightTiles;
+
+        for (size_t row = 0; row < this->height; row++)
+        {
+            heightTiles.push_back(tile());
+        }
+        myMaze.push_back(heightTiles);
+    }
+    markStart();
+    markEnd();
 }
 
 labyrinth::~labyrinth()
 {
 }
 
-void labyrinth::generateLabyrinth()
+void labyrinth::markStart()
 {
+    myMaze[0][1].flag = "S";
+    myMaze[0][1].isWall = false;
 }
 
-void labyrinth::print() const
+void labyrinth::markEnd()
 {
+    myMaze[10][9].flag = "E";
+    myMaze[10][9].isWall = false;
 }
 
-labyrinth::node::node(bool visited)
+bool labyrinth::canMove(int row, int col)
 {
+    
+}
+
+char labyrinth::randomizeDirection()
+{
+    char directions[] = "SWEN";
+    int temp = rand() % 4;
+
+    return directions[temp];
+}
+
+void labyrinth::print()
+{
+
+    for (size_t col = 0; col < this->width; col++)
+    {
+
+        for (size_t row = 0; row < this->height; row++)
+        {
+            std::cout << myMaze[col][row].flag;
+        }
+        std::cout << std::endl;
+    }
 }
