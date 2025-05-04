@@ -69,8 +69,37 @@ void linked_list::insert(double value, size_t pos)
     size_t counter = 0;
     node *tempNode = headNode;
 
-    // FIX INSERT ELEMENT
-    tempNode->value = value;
+    node *insertNode = new node(value);
+
+    while (counter != pos)
+    {
+        if (tempNode->next == nullptr)
+        {
+            std::cout << "Error: Position out of scope!" << std::endl;
+            return;
+        }
+        tempNode = tempNode->next;
+        counter++;
+    }
+    if (tempNode == headNode)
+    {
+        insertNode = headNode;
+        insertNode->next = tempNode;
+        insertNode->prev = nullptr;
+    }
+    else if (tempNode == tailNode)
+    {
+        insertNode = tailNode;
+        insertNode->prev = tempNode;
+        insertNode->next = nullptr;
+    }
+    else if (tempNode == tailNode && tempNode == headNode)
+    {
+        push_front(insertNode->value);
+    }
+    else {
+        
+    }
 }
 
 // Done
