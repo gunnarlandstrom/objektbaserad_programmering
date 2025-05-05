@@ -1,9 +1,9 @@
 #ifndef LABYRINTH_H
 #define LABYRINTH_H
+#include "tile.h"
 #include <iostream>
 #include <vector>
 #include <string>
-#include "tile.h"
 #include <random>
 
 class labyrinth
@@ -20,7 +20,6 @@ public:
     void initialize();
 
     ~labyrinth();
-
 
     void print();
     
