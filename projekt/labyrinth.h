@@ -15,8 +15,9 @@ public:
     void markStart();
     void markEnd();
     char randomizeDirection();
-    bool canMove(int row, int col, char direction);
-    void move(char direction);
+    bool isEdge();
+    int canMove(int row, int col, char direction);
+    void move(char direction, int steps);
 
     void initialize();
 

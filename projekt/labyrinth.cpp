@@ -23,7 +23,8 @@ void labyrinth::initialize()
 
         for (size_t row = 0; row < this->height; row++)
         {
-            heightTiles.push_back(tile(row, col));
+
+            heightTiles.push_back(tile(row, col, width, height));
         }
         myMaze.push_back(heightTiles);
     }
@@ -35,17 +36,16 @@ void labyrinth::initialize()
 
         char direction = randomizeDirection();
 
-        bool step = canMove(mover.first, mover.second, direction);
-        if (step)
+        int steps = canMove(mover.first, mover.second, direction);
+        if (steps > 0)
         {
 
-            //move(direction);
-            move(direction);
+            move(direction, steps);
             std::cout << "-----" << std::endl
                       << std::endl;
+            print();
         }
     }
-    print();
 }
 
 labyrinth::~labyrinth()
@@ -69,8 +69,12 @@ void labyrinth::markEnd()
     end.first = height - 1;
     end.second = width - 2;
 }
+bool labyrinth::isEdge()
+{
+    return 0;
+}
 
-bool labyrinth::canMove(int row, int col, char direction)
+int labyrinth::canMove(int row, int col, char direction)
 {
     if (mover.second == 0 && direction == 'W')
     {
@@ -103,7 +107,19 @@ bool labyrinth::canMove(int row, int col, char direction)
             }
             else
             {
-                return true;
+
+                if (myMaze[mover.first - 1][mover.second].isEdge)
+                {
+                    std::cout << "Moving north once!" << std::endl;
+                    return 1;
+                }
+                else if (myMaze[mover.first - 2][mover.second].isVisited)
+                {
+                    std::cout << "Moving north once!" << std::endl;
+                    return 1;
+                }
+                std::cout << "Moving north twice!" << std::endl;
+                return 2;
             }
         }
         else if (direction == 'W')
@@ -115,7 +131,18 @@ bool labyrinth::canMove(int row, int col, char direction)
             }
             else
             {
-                return true;
+                if (myMaze[mover.first][mover.second - 1].isEdge)
+                {
+                    std::cout << "Moving west once!" << std::endl;
+                    return 1;
+                }
+                else if (myMaze[mover.first][mover.second - 2].isVisited)
+                {
+                    std::cout << "Moving west once!" << std::endl;
+                    return 1;
+                }
+                std::cout << "Moving west twice!" << std::endl;
+                return 2;
             }
         }
         else if (direction == 'E')
@@ -127,7 +154,19 @@ bool labyrinth::canMove(int row, int col, char direction)
             }
             else
             {
-                return true;
+                if (myMaze[mover.first][mover.second + 1].isEdge)
+                {
+
+                    std::cout << "Moving east once!" << std::endl;
+                    return 1;
+                }
+                else if (myMaze[mover.first][mover.second + 2].isVisited)
+                {
+                    std::cout << "Moving east once!" << std::endl;
+                    return 1;
+                }
+                std::cout << "Moving east twice!" << std::endl;
+                return 2;
             }
         }
         else if (direction == 'S')
@@ -139,21 +178,42 @@ bool labyrinth::canMove(int row, int col, char direction)
             }
             else
             {
-                return true;
+                if (myMaze[mover.first + 1][mover.second].isEdge)
+                {
+                    std::cout << "Moving south once!" << std::endl;
+                    return 1;
+                }
+                else if (myMaze[mover.first + 2][mover.second].isVisited)
+                {
+                    std::cout << "Moving south once!" << std::endl;
+                    return 1;
+                }
+                std::cout << "Moving south twice!" << std::endl;
+                return 2;
             }
         }
     }
     return true;
 }
 
-void labyrinth::move(char direction)
+void labyrinth::move(char direction, int steps)
 {
+    if (steps == 0)
+    {
+        return;
+    }
     if (direction == 'S')
     {
         savedPosition.push_back(mover);
         mover.first = mover.first + 1;
         myMaze[mover.first][mover.second].isVisited = true;
         myMaze[mover.first][mover.second].flag = " ";
+        if (steps == 2)
+        {
+            mover.first = mover.first + 1;
+            myMaze[mover.first][mover.second].isVisited = true;
+            myMaze[mover.first][mover.second].flag = " ";
+        }
     }
     else if (direction == 'W')
     {
@@ -161,6 +221,12 @@ void labyrinth::move(char direction)
         mover.second = mover.second - 1;
         myMaze[mover.first][mover.second].isVisited = true;
         myMaze[mover.first][mover.second].flag = " ";
+        if (steps == 2)
+        {
+            mover.second = mover.second - 1;
+            myMaze[mover.first][mover.second].isVisited = true;
+            myMaze[mover.first][mover.second].flag = " ";
+        }
     }
     else if (direction == 'E')
     {
@@ -168,6 +234,12 @@ void labyrinth::move(char direction)
         mover.second = mover.second + 1;
         myMaze[mover.first][mover.second].isVisited = true;
         myMaze[mover.first][mover.second].flag = " ";
+        if (steps == 2)
+        {
+            mover.second = mover.second + 1;
+            myMaze[mover.first][mover.second].isVisited = true;
+            myMaze[mover.first][mover.second].flag = " ";
+        }
     }
     else if (direction == 'N')
     {
@@ -175,6 +247,12 @@ void labyrinth::move(char direction)
         mover.first = mover.first - 1;
         myMaze[mover.first][mover.second].isVisited = true;
         myMaze[mover.first][mover.second].flag = " ";
+        if (steps == 2)
+        {
+            mover.first = mover.first - 1;
+            myMaze[mover.first][mover.second].isVisited = true;
+            myMaze[mover.first][mover.second].flag = " ";
+        }
     }
 }
 
