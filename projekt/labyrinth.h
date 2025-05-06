@@ -15,7 +15,8 @@ public:
     void markStart();
     void markEnd();
     char randomizeDirection();
-    bool canMove(int row, int col);
+    bool canMove(int row, int col, char direction);
+    void move(char direction);
 
     void initialize();
 
@@ -26,6 +27,9 @@ public:
     private:
     size_t width;
     size_t height;
+    std::pair<unsigned int, unsigned int> mover;
+    std::pair<unsigned int, unsigned int> end;
+    std::vector<std::pair<unsigned int, unsigned int>> savedPosition;
     std::vector<std::vector<tile>> myMaze;
 };
 

@@ -4,10 +4,12 @@
 
 struct tile
 {
-    tile();
+    tile(unsigned int x, unsigned int y);
     bool isVisited;
-    bool isWall = true;
+    bool isWall;
     std::string flag = "#";
+    unsigned int x;
+    unsigned int y;
 };
 
 #endif
