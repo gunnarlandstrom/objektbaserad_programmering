@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <random>
+#include <stack>
 
 class labyrinth
 {
@@ -16,22 +17,35 @@ public:
     void markEnd();
     char randomizeDirection();
     bool isEdge();
-    int canMove(int row, int col, char direction);
-    void move(char direction, int steps);
+    int canMove(char direction);
+    void move(char direction);
+    void firstStep(char direction);
 
     void initialize();
 
     ~labyrinth();
 
     void print();
-    
-    private:
+
+private:
     size_t width;
     size_t height;
-    std::pair<unsigned int, unsigned int> mover;
+    
+    // Current position
+    std::pair<unsigned int, unsigned int> pos;
+    
+    // Ending
     std::pair<unsigned int, unsigned int> end;
-    std::vector<std::pair<unsigned int, unsigned int>> savedPosition;
+    
+    // Saved positions for backtrack
+    std::stack<std::pair<unsigned int, unsigned int>> savedPosition;
+    
+    // Edges
+    std::vector<tile> edges;
+    
+    // Maze
     std::vector<std::vector<tile>> myMaze;
+
 };
 
 #endif
