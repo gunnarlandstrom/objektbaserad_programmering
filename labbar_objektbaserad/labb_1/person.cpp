@@ -85,24 +85,12 @@ void startMenu()
 // Prints array of Person
 void printArray(std::vector<Person> &array)
 {
-    for (size_t i = 0; i < array.size(); i++)
-    {
-        Person tempPerson = array[i];
-
-        std::cout << array[i].id << std::endl;
-        std::cout << array[i].name << std::endl;
-        std::cout << array[i].location.zip << std::endl;
-        std::cout << array[i].location.city << std::endl
-                  << std::endl;
-    }
-
-    /*
     for (size_t j = 0; j < array.size(); j++)
     {
         std::string wutIsHappening = ", ";
         std::cout << array[j].id << wutIsHappening << array[j].name << wutIsHappening << array[j].location.zip << wutIsHappening << array[j].location.city << std::endl;
     }
-    */
+    
 }
 
 // Find names from object vector, return objects of matches, else empty
@@ -126,6 +114,7 @@ size_t find_in_names(const std::vector<Person> &haystack, std::string name_part)
         if (arrayName.find(name_part) != std::string::npos)
             temp++;
     }
+    std::cout << temp << std::endl;
     return temp;
 }
 

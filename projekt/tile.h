@@ -5,18 +5,15 @@
 struct tile
 {
     tile();
-    tile(unsigned int x, unsigned int y, int width, int height);
-    bool isVisited;
-    bool isWall;
-    bool isEdge;
+    tile(unsigned int x, unsigned int y);
     std::string flag = "+";
     unsigned int x;
     unsigned int y;
-    std::pair<int,int> north;
-    std::pair<int,int> south;
-    std::pair<int,int> west;
-    std::pair<int,int> east;
-
+    bool isVisited;
+    bool canVisitNorth;
+    bool canVisitSouth;
+    bool canVisitEast;
+    bool canVisitWest;
 };
 
 #endif

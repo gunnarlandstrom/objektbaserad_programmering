@@ -19,7 +19,6 @@ public:
     bool isEdge();
     int canMove(char direction);
     void move(char direction);
-    void firstStep(char direction);
 
     void initialize();
 
