@@ -6,7 +6,7 @@ int main()
 
 	try
 	{
-		labyrinth mylab2(79, 7);
+		labyrinth mylab2(9, 7);
 		mylab2.createMaze();
 		mylab2.print();
 	}
