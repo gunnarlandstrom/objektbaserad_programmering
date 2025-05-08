@@ -1,18 +1,22 @@
 #include "tile.h"
-#include "labyrinth.h"
 
-tile::tile(unsigned int x, unsigned int y)
+tile::tile(size_t x, size_t y)
 {
     this->x = x;
     this->y = y;
-
-    isVisited = false;
-    canVisitNorth = true;
-    canVisitWest = true;
-    canVisitEast = true;
-    canVisitSouth = true;
+    this->flag = "#";
+    this->isVisited = false;
+    this->isNode = false;
+    this->isOuterWall = false;
 }
 
-tile::tile()
+void tile::markAsOuterWall()
 {
+    this->flag = "#";
+    this->isOuterWall = true;
+}
+
+void tile::markAsNode() {
+    this->flag = "#";
+    this->isNode = true;
 }

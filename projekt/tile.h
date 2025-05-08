@@ -4,16 +4,15 @@
 
 struct tile
 {
-    tile();
-    tile(unsigned int x, unsigned int y);
-    std::string flag = "+";
-    unsigned int x;
-    unsigned int y;
+    tile(size_t x, size_t y);
+    void markAsNode();
+    void markAsOuterWall();
+    std::string flag;
+    size_t x;
+    size_t y;
     bool isVisited;
-    bool canVisitNorth;
-    bool canVisitSouth;
-    bool canVisitEast;
-    bool canVisitWest;
+    bool isNode;
+    bool isOuterWall;
 };
 
 #endif

@@ -10,40 +10,49 @@
 class labyrinth
 {
 public:
-    labyrinth();
+	labyrinth();
+	labyrinth(size_t width, size_t height);
+	~labyrinth();
 
-    labyrinth(size_t width, size_t height);
-    void markStart();
-    void markEnd();
-    char randomizeDirection();
-    bool isEdge();
-    int canMove(char direction);
-    void move(char direction);
-
-    void initialize();
-
-    ~labyrinth();
-
-    void print();
+	// Functions
+	void print();
+	void createMaze();
 
 private:
-    size_t width;
-    size_t height;
-    
-    // Current position
-    std::pair<unsigned int, unsigned int> pos;
-    
-    // Ending
-    std::pair<unsigned int, unsigned int> end;
-    
-    // Saved positions for backtrack
-    std::stack<std::pair<unsigned int, unsigned int>> savedPosition;
-    
-    // Edges
-    std::vector<tile> edges;
-    
-    // Maze
-    std::vector<std::vector<tile>> myMaze;
+	// Variables
+	size_t width;
+	size_t height;
+
+	// Functions
+	void markOuterWalls();
+	void createBoard();
+	void markNodes();
+	void initialize();
+	char randomizeDirection();
+	void markStart();
+	void markEnd();
+	bool isStuck();
+
+	// Can move
+	bool canMove(char direction);
+	bool canMoveSouth();
+	bool canMoveNorth();
+	bool canMoveWest();
+	bool canMoveEast();
+	void move(char direction);
+	void moveSouth();
+	void moveNorth();
+	void moveWest();
+	void moveEast();
+	
+	// Current position
+	std::pair<size_t, size_t> pos;
+
+	// Saved positions for backtrack
+	std::stack<std::pair<size_t, size_t>> savedPosition;
+
+	// Maze
+	std::vector<std::vector<tile>> myMaze;
 
 };
 

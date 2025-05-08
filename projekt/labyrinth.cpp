@@ -3,170 +3,266 @@
 
 labyrinth::labyrinth()
 {
-    width = 7;
-    height = 7;
-    initialize();
+	width = 7;
+	height = 7;
+	initialize();
 }
 
 labyrinth::labyrinth(size_t width, size_t height)
 {
-    this->width = width;
-    this->height = height;
-    initialize();
+	this->width = width;
+	this->height = height;
+	initialize();
 }
 
 void labyrinth::initialize()
 {
-    for (size_t row = 0; row < this->width; row++)
-    {
-        std::vector<tile> heightTiles;
-
-        for (size_t col = 0; col < this->height; col++)
-        {
-            tile temptile(row, col);
-            if (row == 0)
-            {
-                temptile.canVisitNorth = false;
-            }
-            else if (row == height - 1)
-            {
-                temptile.canVisitSouth = false;
-            }
-            if (col == 0)
-            {
-                temptile.canVisitWest = false;
-            }
-            else if (col == width - 1)
-            {
-                temptile.canVisitEast = false;
-            }
-            std::cout << "This is row: " << row << " This is col: " << col << std::endl;
-            std::cout << "Visit north: " << temptile.canVisitNorth << " Visit west: " << temptile.canVisitWest << std::endl;
-            std::cout << "Visit East: " << temptile.canVisitEast << " Visit south: " << temptile.canVisitSouth << std::endl
-                      << std::endl;
-            heightTiles.push_back(temptile);
-        }
-        myMaze.push_back(heightTiles);
-    }
-    // markStart();
-    // markEnd();
-
-    char direction = randomizeDirection();
+	createBoard();
+	markOuterWalls();
+	markNodes();
+	markStart();
+	markEnd();
 }
 
 labyrinth::~labyrinth()
 {
 }
 
+void labyrinth::createMaze() {
+	while (savedPosition.size() != 0) {
+		char direction = randomizeDirection();
+		bool canFlytt = canMove(direction);
+		if (canFlytt) {
+			move(direction);
+		}
+		else {
+			if (isStuck()) {
+				savedPosition.pop();
+				if (savedPosition.size() != 0) {
+					pos = savedPosition.top();
+				}
+			}
+		}
+	}
+}
+
 void labyrinth::markStart()
 {
-    // myMaze[0][0].flag = "S";
-    myMaze[0][0].isVisited = true;
-    pos.first = 0;
-    pos.second = 0;
+	myMaze[0][1].flag = "S";
+	myMaze[0][0].isVisited = true;
+	pos = std::make_pair(1, 1);
+	myMaze[pos.first][pos.second].flag = " ";
+	myMaze[pos.first][pos.second].isVisited = true;
+	savedPosition.push(pos);
 }
 
 void labyrinth::markEnd()
 {
-    /*
-    myMaze[height - 1][width - 2].flag = "E";
-    myMaze[height - 1][width - 2].isVisited = true;
-    end.first = height - 2;
-    end.second = width - 2;
-    */
-}
-bool labyrinth::isEdge()
-{
-    return 0;
+	myMaze[height - 1][width - 2].flag = "E";
+	myMaze[height - 1][width - 2].isVisited = true;
 }
 
-int labyrinth::canMove(char direction)
+bool labyrinth::canMove(char direction)
 {
-    if (direction == 'S')
-    {
-        if (myMaze[pos.first + 1][pos.second].isVisited)
-        {
-            return false;
-        }
-    }
-    else if (direction == 'W')
-    {
-        if (myMaze[pos.first][pos.second - 1].isVisited)
-        {
-            return false;
-        }
-    }
-    else if (direction == 'E')
-    {
-
-        if (myMaze[pos.first][pos.second + 1].isVisited)
-        {
-            return false;
-        }
-    }
-    else if (direction == 'N')
-    {
-        if (myMaze[pos.first - 1][pos.second].isVisited)
-        {
-            return false;
-        }
-    }
-    return true;
+	if (direction == 'S')
+	{
+		return canMoveSouth();
+	}
+	else if (direction == 'W')
+	{
+		return canMoveWest();
+	}
+	else if (direction == 'E')
+	{
+		return canMoveEast();
+	}
+	else if (direction == 'N')
+	{
+		return canMoveNorth();
+	}
+	throw std::invalid_argument("Invalid direction");
 }
+
+bool labyrinth::isStuck() {
+	return !(canMoveNorth() || canMoveSouth() || canMoveEast() || canMoveWest());
+}
+
+bool labyrinth::canMoveSouth()
+{
+	if (myMaze[pos.first + 1][pos.second].isOuterWall) {
+		return false;
+	}
+	if (myMaze[pos.first + 2][pos.second].isVisited) {
+		return false;
+	}
+	return true;
+}
+
+bool labyrinth::canMoveNorth()
+{
+	if (myMaze[pos.first - 1][pos.second].isOuterWall) {
+		return false;
+	}
+	if (myMaze[pos.first - 2][pos.second].isVisited) {
+		return false;
+	}
+	return true;
+}
+
+bool labyrinth::canMoveEast()
+{
+	if (myMaze[pos.first][pos.second + 1].isOuterWall) {
+		return false;
+	}
+	if (myMaze[pos.first][pos.second + 2].isVisited) {
+		return false;
+	}
+	return true;
+}
+
+bool labyrinth::canMoveWest()
+{
+	if (myMaze[pos.first][pos.second - 1].isOuterWall) {
+		return false;
+	}
+	if (myMaze[pos.first][pos.second - 2].isVisited) {
+		return false;
+	}
+	return true;
+}
+
 
 void labyrinth::move(char direction)
 {
+	if (direction == 'S')
+	{
+		return moveSouth();
+	}
+	else if (direction == 'W')
+	{
+		return moveWest();
+	}
+	else if (direction == 'E')
+	{
+		return moveEast();
+	}
+	else if (direction == 'N')
+	{
+		return moveNorth();
+	}
+	throw std::invalid_argument("Invalid direction");
+}
+
+void labyrinth::moveSouth()
+{
+	myMaze[pos.first + 1][pos.second].flag = " ";
+	myMaze[pos.first + 2][pos.second].flag = " ";
+	myMaze[pos.first + 1][pos.second].isVisited = true;
+	myMaze[pos.first + 2][pos.second].isVisited = true;
+	pos.first += 2;
+	savedPosition.push(pos);
+}
+
+void labyrinth::moveNorth()
+{
+	myMaze[pos.first - 1][pos.second].flag = " ";
+	myMaze[pos.first - 2][pos.second].flag = " ";
+	myMaze[pos.first - 1][pos.second].isVisited = true;
+	myMaze[pos.first - 2][pos.second].isVisited = true;
+	pos.first -= 2;
+	savedPosition.push(pos);
+}
+
+void labyrinth::moveEast()
+{
+	myMaze[pos.first][pos.second + 1].flag = " ";
+	myMaze[pos.first][pos.second + 2].flag = " ";
+	myMaze[pos.first][pos.second + 1].isVisited = true;
+	myMaze[pos.first][pos.second + 2].isVisited = true;
+	pos.second += 2;
+	savedPosition.push(pos);
+}
+
+void labyrinth::moveWest()
+{
+	myMaze[pos.first][pos.second - 1].flag = " ";
+	myMaze[pos.first][pos.second - 2].flag = " ";
+	myMaze[pos.first][pos.second - 1].isVisited = true;
+	myMaze[pos.first][pos.second - 2].isVisited = true;
+	pos.second -= 2;
+	savedPosition.push(pos);
 }
 
 char labyrinth::randomizeDirection()
 {
-    char directions[] = "SWEN";
-    int temp = rand() % 4;
+	char directions[] = "SWEN";
+	int temp = rand() % 4;
 
-    return directions[temp];
+	return directions[temp];
 }
 
 void labyrinth::print()
 {
-    int realWidth = (width * 2) + 1;
-    int realHeight = (height * 2) + 1;
-    int counterwidth = 0;
-    int counterheight = 0;
-    std::cout << realWidth << std::endl;
-    std::cout << realHeight << std::endl;
+	for (int col = 0; col < this->myMaze.size(); col++)
+	{
+		for (int row = 0; row < this->myMaze[col].size(); row++)
+		{
+			if (col == pos.first && row == pos.second) {
+				std::cout << "*" << " ";
+			}
+			else {
+				std::cout << myMaze[col][row].flag << " ";
+			}
+		}
+		std::cout << std::endl;
+	}
+}
 
-    for (int i = 0; i < realWidth; i++)
-    {
+void labyrinth::markOuterWalls()
+{
+	for (size_t col = 0; col < this->height; col++)
+	{
+		for (size_t row = 0; row < this->width; row++)
+		{
+			bool xCondition = myMaze[col][row].x == 0 || myMaze[col][row].x == this->width - 1;
+			bool yCondition = myMaze[col][row].y == 0 || myMaze[col][row].y == this->height - 1;
 
-        for (int j = 0; j < realHeight; j++)
-        {
+			if (xCondition || yCondition)
+			{
+				myMaze[col][row].markAsOuterWall();
+			}
+		}
+	}
+}
 
-            if (i == 0 || j == 0 || i == realWidth || j == realHeight)
-            {
-                std::cout << "#";
-            }
-            else
-            {
-                if (j % 2 == 0)
-                {
-                    std::cout << "#";
-                }
-                else if (i % 2 == 0)
-                {
-                    std::cout << "#";
-                }
-                else
-                {
-                    std::cout << myMaze[counterheight][counterwidth].flag;
-                    counterwidth++;
-                }
-            }
-        }
-        if (counterheight < 3)
-        {
-            counterheight++;
-        }
-        counterwidth = 0;
-        std::cout << std::endl;
-    }
+void labyrinth::markNodes()
+{
+	for (size_t col = 0; col < this->height; col++)
+	{
+		for (size_t row = 0; row < this->width; row++)
+		{
+			bool xCondition = myMaze[col][row].x % 2 == 1;
+			bool yCondition = myMaze[col][row].y % 2 == 1;
+
+			if (xCondition && yCondition)
+			{
+				myMaze[col][row].markAsNode();
+			}
+		}
+	}
+}
+
+void labyrinth::createBoard()
+{
+	for (size_t col = 0; col < this->height; col++)
+	{
+		std::vector<tile> inner;
+
+		for (size_t row = 0; row < this->width; row++)
+		{
+			tile temp(row, col);
+			inner.push_back(temp);
+		}
+		myMaze.push_back(inner);
+	}
 }
