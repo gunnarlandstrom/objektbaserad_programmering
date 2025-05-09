@@ -25,24 +25,18 @@ private:
 	size_t height;
 
 	// Functions
-	void markOuterWalls();
-	void markAsUnvisited();
-	bool isWallOrVisited(char direction);
-	void backtrack();
-	bool isWallSouth();
-	bool isWallNorth();
-	bool isWallEast();
-	bool isWallWest();
-	void createBoard();
-	void markNodes();
 	void initialize();
-	char randomizeDirection();
+	void createBoard();
 	void markStart();
 	void markEnd();
-	bool isStuck();
+	void markNodes();
+	void markOuterWalls();
 	void drawPath(char direction);
+	void markAsUnvisited();
+	void backtrack();
 
-	// Can move
+	// move
+	char randomizeDirection();
 	bool canMove(char direction);
 	bool canMoveSouth();
 	bool canMoveNorth();
@@ -53,8 +47,14 @@ private:
 	void moveNorth();
 	void moveWest();
 	void moveEast();
+	bool isWallOrVisited(char direction);
+	bool isWallSouth();
+	bool isWallNorth();
+	bool isWallEast();
+	bool isWallWest();
+	bool isStuck();
 
-	// Current position
+	// Positions
 	std::pair<size_t, size_t> pos;
 	std::pair<size_t, size_t> temp;
 	std::pair<size_t, size_t> end;
