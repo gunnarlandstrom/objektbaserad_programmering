@@ -6,9 +6,11 @@ int main()
 
 	try
 	{
-		labyrinth mylab2(9, 7);
+		labyrinth mylab2(21, 21);
 		mylab2.createMaze();
 		mylab2.print();
+		std::cout << std::endl;
+		mylab2.solveMaze();
 	}
 	catch (const std::exception& e)
 	{

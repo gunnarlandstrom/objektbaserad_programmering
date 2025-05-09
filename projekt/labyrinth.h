@@ -17,6 +17,7 @@ public:
 	// Functions
 	void print();
 	void createMaze();
+	void solveMaze();
 
 private:
 	// Variables
@@ -25,6 +26,13 @@ private:
 
 	// Functions
 	void markOuterWalls();
+	void markAsUnvisited();
+	bool isWallOrVisited(char direction);
+	void backtrack();
+	bool isWallSouth();
+	bool isWallNorth();
+	bool isWallEast();
+	bool isWallWest();
 	void createBoard();
 	void markNodes();
 	void initialize();
@@ -32,6 +40,7 @@ private:
 	void markStart();
 	void markEnd();
 	bool isStuck();
+	void drawPath(char direction);
 
 	// Can move
 	bool canMove(char direction);
@@ -44,9 +53,11 @@ private:
 	void moveNorth();
 	void moveWest();
 	void moveEast();
-	
+
 	// Current position
 	std::pair<size_t, size_t> pos;
+	std::pair<size_t, size_t> temp;
+	std::pair<size_t, size_t> end;
 
 	// Saved positions for backtrack
 	std::stack<std::pair<size_t, size_t>> savedPosition;
