@@ -15,10 +15,6 @@ public:
 	~labyrinth();
 
 	// Functions
-	void startMenu();
-	void print();
-	void solveMaze();
-	void wantsToGenerateMaze();
 
 private:
 	// Variables
@@ -26,17 +22,21 @@ private:
 	size_t height;
 
 	// Functions
-	void createMaze();
+	void startMenu();
+	void print();
 	void initialize();
+	void createMaze();
 	void createBoard();
+	void wantsToGenerateMaze();
 	void markStart();
 	void markEnd();
 	void markNodes();
 	void markOuterWalls();
 	void drawPath(char direction);
 	void markAsUnvisited();
-	void exitProgram();
+	void solveMaze();
 	void backtrack();
+	void exitProgram();
 
 	// move
 	char randomizeDirection();

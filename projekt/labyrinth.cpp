@@ -1,6 +1,7 @@
 ﻿#include "labyrinth.h"
 #include "tile.h"
 
+
 labyrinth::labyrinth()
 {
 	startMenu();
@@ -13,6 +14,10 @@ labyrinth::labyrinth(size_t height, size_t width)
 	initialize();
 }
 
+labyrinth::~labyrinth()
+{
+}
+
 void labyrinth::initialize()
 {
 	createBoard();
@@ -23,9 +28,25 @@ void labyrinth::initialize()
 	createMaze();
 }
 
-labyrinth::~labyrinth()
-{
+void labyrinth::createMaze() {
+	while (savedPosition.size() != 0) {
+		char direction = randomizeDirection();
+		bool moveable = canMove(direction);
+		if (moveable) {
+			move(direction);
+		}
+		else {
+			if (isStuck()) {
+				savedPosition.pop();
+				if (savedPosition.size() != 0) {
+					pos = savedPosition.top();
+				}
+			}
+		}
+	}
 }
+
+
 
 void labyrinth::wantsToGenerateMaze() {
 
@@ -37,7 +58,7 @@ void labyrinth::wantsToGenerateMaze() {
 
 	size_t userWidth;
 	size_t userHeight;
-	std::cout << "Enter the dimensions of the maze! (Odd numbers only)" << std::endl;
+	std::cout << "Enter the dimensions of the maze!" << std::endl;
 
 	std::cout << "Height: ";
 	std::getline(std::cin, desiredWidth);
@@ -263,23 +284,7 @@ void labyrinth::drawPath(char direction) {
 
 }
 
-void labyrinth::createMaze() {
-	while (savedPosition.size() != 0) {
-		char direction = randomizeDirection();
-		bool moveable = canMove(direction);
-		if (moveable) {
-			move(direction);
-		}
-		else {
-			if (isStuck()) {
-				savedPosition.pop();
-				if (savedPosition.size() != 0) {
-					pos = savedPosition.top();
-				}
-			}
-		}
-	}
-}
+
 
 void labyrinth::markStart()
 {
