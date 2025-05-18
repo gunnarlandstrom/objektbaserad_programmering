@@ -1,4 +1,11 @@
-﻿#include "maze.h"
+﻿/*
+// Project Maze
+// Name: Gunnar Landström
+// Date: 2025-05-18
+// Grade: E+
+*/
+
+#include "maze.h"
 #include "node.h"
 
 labyrinth::labyrinth()
@@ -11,6 +18,7 @@ labyrinth::~labyrinth()
 {
 }
 
+// Generates the maze
 void labyrinth::initialize()
 {
 	createBoard();
@@ -21,7 +29,7 @@ void labyrinth::initialize()
 	markAsUnvisited();
 }
 
-// Startmenu
+// Crappy UI
 void labyrinth::startMenu()
 {
 	bool wantsToPlay = true;
@@ -56,17 +64,18 @@ void labyrinth::startMenu()
 
 			default:
 				std::cout << "\n";
-				std::cout << "Wrong input, try again!" << std::endl;
+				std::cout << "Wrong input, try again!\n\n";
 				break;
 			}
 		}
 		catch (const std::exception &)
 		{
-			std::cout << "Wrong input, try again! " << std::endl;
+			std::cout << "Wrong input, try again!\n\n";
 		}
 	}
 }
 
+// Userdefined size
 void labyrinth::wantsToGenerateMaze()
 {
 
@@ -94,7 +103,7 @@ void labyrinth::wantsToGenerateMaze()
 
 			if (userWidth < 3 || userHeight < 3)
 			{
-				std::cout << "That's a little small wouldnt you say? Make it a little bigger!\n\n";
+				std::cout << "That's a little small wouldnt you say? Make it a little bigger! width: 3-150 and height: 3-50 \n\n";
 				continue;
 			}
 			if (userWidth > 150 || userHeight > 50)
@@ -165,12 +174,9 @@ void labyrinth::solveMaze()
 	char draw = ' ';
 	while (pos != end)
 	{
-
 		draw = walkedPath.front();
-
 		if (canMove(draw))
 		{
-
 			move(draw);
 			walkedPath.pop_front();
 		}
@@ -178,7 +184,6 @@ void labyrinth::solveMaze()
 		{
 			if (isStuck())
 			{
-
 				if (savedPosition.size() != 0)
 				{
 					if (walkedPath.size() != 0)
@@ -193,6 +198,7 @@ void labyrinth::solveMaze()
 	drawPath('S');
 }
 
+// Revert steps taken
 void labyrinth::backtrack()
 {
 	if (savedPosition.size() != 0)
@@ -208,6 +214,7 @@ void labyrinth::backtrack()
 	myMaze[temp.first][temp.second].flag = " ";
 }
 
+// Remove markers
 void labyrinth::markAsUnvisited()
 {
 	for (size_t col = 0; col < this->height; col++)
@@ -262,6 +269,7 @@ void labyrinth::markEnd()
 	end = std::make_pair(height - 1, width - 1);
 }
 
+// Walkcheck
 bool labyrinth::canMove(char direction)
 {
 	if (direction == 'S')
@@ -283,6 +291,7 @@ bool labyrinth::canMove(char direction)
 	return false;
 }
 
+// Stuckcheck
 bool labyrinth::isStuck()
 {
 	return !(canMoveNorth() || canMoveSouth() || canMoveEast() || canMoveWest());
@@ -356,6 +365,7 @@ bool labyrinth::canMoveWest()
 	return myMaze[pos.first][pos.second].walkWest && !myMaze[pos.first][pos.second - 1].isVisited;
 }
 
+// Move around 
 void labyrinth::move(char direction)
 {
 	if (direction == 'S')
@@ -428,6 +438,7 @@ void labyrinth::moveWest()
 	savedPosition.push(pos);
 }
 
+// Randomizer
 char labyrinth::randomizeDirection()
 {
 	char directions[] = "SWEN";
@@ -436,6 +447,7 @@ char labyrinth::randomizeDirection()
 	return directions[temp];
 }
 
+// Disgusting mazeprinter
 void labyrinth::print()
 {
 	for (int i = 0; i < (width * 2) + 1; i++)
@@ -495,6 +507,7 @@ void labyrinth::print()
 	std::cout << std::endl;
 }
 
+// Marks out of bound potential nodes
 void labyrinth::markOuterNodes()
 {
 	for (size_t col = 0; col < this->height; col++)
@@ -526,6 +539,7 @@ void labyrinth::markOuterNodes()
 	}
 }
 
+// 2d container
 void labyrinth::createBoard()
 {
 

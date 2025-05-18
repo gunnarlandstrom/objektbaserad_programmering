@@ -1,3 +1,10 @@
+/*
+// Project Maze
+// Name: Gunnar Landström
+// Date: 2025-05-18
+// Grade: E+
+*/
+
 #ifndef MAZE_H
 #define MAZE_H
 #include "node.h"
@@ -56,9 +63,10 @@ private:
 
 	// Saved positions for backtrack
 	std::stack<std::pair<size_t, size_t>> savedPosition;
+	// deque for drawing solution
 	std::deque<char> walkedPath;
 
-	// Maze
+	// 2D Maze
 	std::vector<std::vector<node>> myMaze;
 
 };
