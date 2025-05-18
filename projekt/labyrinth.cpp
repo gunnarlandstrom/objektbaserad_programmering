@@ -1,7 +1,6 @@
 ﻿#include "labyrinth.h"
 #include "tile.h"
 
-
 labyrinth::labyrinth()
 {
 	startMenu();
@@ -46,8 +45,6 @@ void labyrinth::createMaze() {
 	}
 }
 
-
-
 void labyrinth::wantsToGenerateMaze() {
 
 	while (myMaze.size() != 0) {
@@ -60,10 +57,10 @@ void labyrinth::wantsToGenerateMaze() {
 	size_t userHeight;
 	std::cout << "Enter the dimensions of the maze!" << std::endl;
 
-	std::cout << "Height: ";
+	std::cout << "Width: ";
 	std::getline(std::cin, desiredWidth);
 
-	std::cout << "Width: ";
+	std::cout << "Height: ";
 	std::getline(std::cin, desiredHeight);
 
 	userWidth = std::stoi(desiredWidth);
@@ -192,7 +189,6 @@ void labyrinth::backtrack() {
 		myMaze[pos.first][pos.second - 1].flag = " ";
 		myMaze[pos.first][pos.second].flag = " ";
 	}
-
 }
 
 bool labyrinth::isWallOrVisited(char direction) {
@@ -213,7 +209,6 @@ bool labyrinth::isWallOrVisited(char direction) {
 	{
 		return isWallNorth();
 	}
-	throw std::invalid_argument("Invalid direction");
 }
 
 bool labyrinth::isWallSouth() {
@@ -247,7 +242,6 @@ bool labyrinth::isWallWest() {
 void labyrinth::markAsUnvisited() {
 	for (size_t col = 0; col < this->height; col++)
 	{
-
 		for (size_t row = 0; row < this->width; row++)
 		{
 			if (myMaze[col][row].isNode) {
@@ -293,9 +287,6 @@ void labyrinth::markStart()
 	pos = std::make_pair(1, 1);
 	myMaze[pos.first][pos.second].flag = " ";
 	myMaze[pos.first][pos.second].isVisited = true;
-	while (savedPosition.size() != 0) {
-		savedPosition.pop();
-	}
 	savedPosition.push(pos);
 }
 
@@ -324,7 +315,6 @@ bool labyrinth::canMove(char direction)
 	{
 		return canMoveNorth();
 	}
-	throw std::invalid_argument("Invalid direction");
 }
 
 bool labyrinth::isStuck() {
@@ -394,7 +384,6 @@ void labyrinth::move(char direction)
 	{
 		return moveNorth();
 	}
-	throw std::invalid_argument("Invalid direction");
 }
 
 void labyrinth::moveSouth()
