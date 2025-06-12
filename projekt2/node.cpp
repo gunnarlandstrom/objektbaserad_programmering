@@ -2,7 +2,7 @@
 // Project Maze
 // Name: Gunnar Landström
 // Date: 2025-05-18
-// Grade: E+
+// Grade: E
 */
 
 #include "node.h"
@@ -11,13 +11,15 @@ node::node(size_t width, size_t height)
 {
 	this->x = width;
 	this->y = height;
-	this->flag = " ";
 	this->isVisited = false;
 	this->isOuterWall = false;
 	this->walkNorth = true;
 	this->walkSouth = true;
 	this->walkEast = true;
 	this->walkWest = true;
+
+	// Dessa ska väl bort
+	this->flag = "*";
 	this->eastFlag = "#";
 	this->northFlag = "#";
 	this->westFlag = "#";
@@ -28,6 +30,7 @@ node::node(size_t width, size_t height)
 
 void node::markAsOuterNodesEast()
 {
+	// Flagga ska väl bort, fixa print
 	this->eastFlag = "#";
 	this->isOuterWall = true;
 	this->walkEast = false;
@@ -35,6 +38,7 @@ void node::markAsOuterNodesEast()
 
 void node::markAsOuterNodesSouth()
 {
+	// Flagga ska väl bort, fixa print
 	this->southFlag = "#";
 	this->isOuterWall = true;
 	this->walkSouth = false;
@@ -42,6 +46,7 @@ void node::markAsOuterNodesSouth()
 
 void node::markAsOuterNodesNorth()
 {
+	// Flagga ska väl bort, fixa print
 	this->northFlag = "#";
 	this->isOuterWall = true;
 	this->walkNorth = false;
@@ -49,6 +54,7 @@ void node::markAsOuterNodesNorth()
 
 void node::markAsOuterNodesWest()
 {
+	// Flagga ska väl bort, fixa print
 	this->westFlag = "#";
 	this->isOuterWall = true;
 	this->walkWest = false;

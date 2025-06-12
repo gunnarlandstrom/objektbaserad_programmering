@@ -2,7 +2,7 @@
 // Project Maze
 // Name: Gunnar Landström
 // Date: 2025-05-18
-// Grade: E+
+// Grade: E
 */
 
 #include "maze.h"
@@ -12,10 +12,13 @@ labyrinth::labyrinth()
 {
 	this->height = 7;
 	this->width = 7;
+	initialize();
 }
 
-labyrinth::~labyrinth()
-{
+labyrinth::labyrinth(size_t width, size_t height) {
+	this->height = height;
+	this->width = width;
+	initialize();
 }
 
 // Generates the maze
@@ -23,140 +26,51 @@ void labyrinth::initialize()
 {
 	createBoard();
 	markStart();
-	markEnd();
+	//markEnd();
 	markOuterNodes();
 	createMaze();
 	markAsUnvisited();
 }
 
-// Crappy UI
-void labyrinth::startMenu()
-{
-	bool wantsToPlay = true;
-	std::string userChoice;
-	std::cout << "This is a program that can create and solve labyrinths at the size of your choosing! \n"
-			  << std::endl;
-	while (wantsToPlay)
-	{
-		std::cout << "[1] - Generate a maze. \n";
-		std::cout << "[2] - Show solution. \n";
-		std::cout << "[3] - Exit program.\n";
-		std::cout << "Input:> ";
-		try
-		{
-			std::getline(std::cin, userChoice);
-			int choice = std::stoi(userChoice);
-			switch (choice)
-			{
-			case 1:
-				wantsToGenerateMaze();
-				print();
-				solveMaze();
 
-				continue;
-			case 2:
+void labyrinth::setWidth(size_t width) {
 
-				print();
-				continue;
-
-			case 3:
-				exitProgram();
-
-			default:
-				std::cout << "\n";
-				std::cout << "Wrong input, try again!\n\n";
-				break;
-			}
-		}
-		catch (const std::exception &)
-		{
-			std::cout << "Wrong input, try again!\n\n";
-		}
-	}
+	this->width = width;
 }
 
-// Userdefined size
-void labyrinth::wantsToGenerateMaze()
-{
-
-	std::string desiredWidth;
-	std::string desiredHeight;
-	size_t userWidth;
-	size_t userHeight;
-
-	bool unvalidInput = true;
-
-	while (unvalidInput)
-	{
-		try
-		{
-			std::cout << "Enter the dimensions of the maze!" << std::endl;
-
-			std::cout << "Width (3-150): ";
-			std::getline(std::cin, desiredWidth);
-
-			std::cout << "Height (3-50): ";
-			std::getline(std::cin, desiredHeight);
-
-			userWidth = std::stoi(desiredWidth);
-			userHeight = std::stoi(desiredHeight);
-
-			if (userWidth < 3 || userHeight < 3)
-			{
-				std::cout << "That's a little small wouldnt you say? Make it a little bigger! width: 3-150 and height: 3-50 \n\n";
-				continue;
-			}
-			if (userWidth > 150 || userHeight > 50)
-			{
-				std::cout << "Woah!, relax my friend, nobody wants them that big! Try width: 3-150 and height: 3-50\n\n";
-				continue;
-			}
-		}
-		catch (const std::exception &)
-		{
-			std::cout << "Wrong input, please try again! " << std::endl;
-			continue;
-		}
-		unvalidInput = false;
-	}
-	this->width = userWidth;
-	this->height = userHeight;
-	initialize();
+void labyrinth::setHeight(size_t height) {
+	this->height = height;
 }
+
 
 void labyrinth::createMaze()
 {
-	while (walkedPath.size() != 0)
-	{
-		walkedPath.pop_back();
-	}
-	while (savedPosition.size() > 1)
-	{
-		savedPosition.pop();
-	}
+	std::pair<size_t, size_t> position = { 0,0 };
+	
+	walkedPath.clear();
+	savedPosition.push(position);
 	while (savedPosition.size() != 0)
 	{
 		char direction = randomizeDirection();
-		bool moveable = canMove(direction);
+		bool moveable = canMove(direction, position);
 		if (moveable)
 		{
-			move(direction);
+			position = move(direction, position);
 		}
-
 		else
 		{
-			if (isStuck())
+			if (isStuck(position))
 			{
 				if (savedPosition.size() != 0)
 				{
-					backtrack();
+					position = backtrack(position);
 				}
 			}
 		}
 	}
 }
 
-void labyrinth::exitProgram()
+void exitProgram()
 {
 	std::cout << "Exiting program, until next time!" << std::endl;
 	exit(0);
@@ -164,25 +78,28 @@ void labyrinth::exitProgram()
 
 void labyrinth::solveMaze()
 {
+	std::pair<size_t, size_t> position = { 0,0 };
 	while (savedPosition.size() != 0)
 	{
-		backtrack();
+		position = backtrack(position);
 	}
 	markAsUnvisited();
 	markOuterNodes();
 	markStart();
+	savedPosition.push(position);
 	char draw = ' ';
-	while (pos != end)
+	std::pair<size_t, size_t> end = std::make_pair(height - 1, width - 1);
+	while (position != end)
 	{
 		draw = walkedPath.front();
-		if (canMove(draw))
+		if (canMove(draw, position))
 		{
-			move(draw);
+			position = move(draw, position);
 			walkedPath.pop_front();
 		}
 		else
 		{
-			if (isStuck())
+			if (isStuck(position))
 			{
 				if (savedPosition.size() != 0)
 				{
@@ -190,28 +107,31 @@ void labyrinth::solveMaze()
 					{
 						walkedPath.pop_back();
 					}
-					backtrack();
+					position = backtrack(position);
 				}
 			}
 		}
 	}
-	drawPath('S');
+	//drawPath('S');
 }
 
 // Revert steps taken
-void labyrinth::backtrack()
+std::pair<size_t, size_t> labyrinth::backtrack(std::pair<size_t, size_t> position)
 {
+	std::pair<size_t, size_t> temp;
 	if (savedPosition.size() != 0)
 	{
-		temp = pos;
+		temp = position;
 		savedPosition.pop();
 		if (savedPosition.size() != 0)
 		{
-			pos = savedPosition.top();
+			position = savedPosition.top();
 		}
 	}
-	myMaze[pos.first][pos.second].flag = " ";
+	// Bools instead of flags?
+	myMaze[position.first][position.second].flag = " ";
 	myMaze[temp.first][temp.second].flag = " ";
+	return position;
 }
 
 // Remove markers
@@ -234,76 +154,51 @@ void labyrinth::markAsUnvisited()
 	}
 }
 
-void labyrinth::drawPath(char direction)
-{
-	if (direction == 'S')
-	{
-		myMaze[pos.first][pos.second].flag = "v";
-	}
-	else if (direction == 'W')
-	{
-		myMaze[pos.first][pos.second].flag = "<";
-	}
-	else if (direction == 'E')
-	{
-		myMaze[pos.first][pos.second].flag = ">";
-	}
-	else if (direction == 'N')
-	{
-		myMaze[pos.first][pos.second].flag = "^";
-	}
-}
-
 void labyrinth::markStart()
 {
-	myMaze[0][0].northFlag = "S";
 	myMaze[0][0].isVisited = true;
-	pos = std::make_pair(0, 0);
-	savedPosition.push(pos);
 }
 
 void labyrinth::markEnd()
 {
-	myMaze[height - 1][width - 1].southFlag = "E";
 	myMaze[height - 1][width - 1].isVisited = false;
-	end = std::make_pair(height - 1, width - 1);
 }
 
 // Walkcheck
-bool labyrinth::canMove(char direction)
+bool labyrinth::canMove(char direction, std::pair<size_t, size_t> position)
 {
 	if (direction == 'S')
 	{
-		return canMoveSouth();
+		return canMoveSouth(position);
 	}
 	else if (direction == 'W')
 	{
-		return canMoveWest();
+		return canMoveWest(position);
 	}
 	else if (direction == 'E')
 	{
-		return canMoveEast();
+		return canMoveEast(position);
 	}
 	else if (direction == 'N')
 	{
-		return canMoveNorth();
+		return canMoveNorth(position);
 	}
 	return false;
 }
 
 // Stuckcheck
-bool labyrinth::isStuck()
+bool labyrinth::isStuck(std::pair<size_t, size_t> position)
 {
-	return !(canMoveNorth() || canMoveSouth() || canMoveEast() || canMoveWest());
+	return !(canMoveNorth(position) || canMoveSouth(position) || canMoveEast(position) || canMoveWest(position));
 }
 
-bool labyrinth::canMoveSouth()
+bool labyrinth::canMoveSouth(std::pair<size_t, size_t> position)
 {
-	if (myMaze[pos.first][pos.second].isOuterWall)
+	if (myMaze[position.first][position.second].isOuterWall)
 	{
-		if (myMaze[pos.first][pos.second].walkSouth)
+		if (myMaze[position.first][position.second].walkSouth)
 		{
-			if (myMaze[pos.first + 1][pos.second].isVisited)
+			if (myMaze[position.first + 1][position.second].isVisited)
 			{
 				return false;
 			}
@@ -311,16 +206,16 @@ bool labyrinth::canMoveSouth()
 		}
 		return false;
 	}
-	return myMaze[pos.first][pos.second].walkSouth && !myMaze[pos.first + 1][pos.second].isVisited;
+	return myMaze[position.first][position.second].walkSouth && !myMaze[position.first + 1][position.second].isVisited;
 }
 
-bool labyrinth::canMoveNorth()
+bool labyrinth::canMoveNorth(std::pair<size_t, size_t> position)
 {
-	if (myMaze[pos.first][pos.second].isOuterWall)
+	if (myMaze[position.first][position.second].isOuterWall)
 	{
-		if (myMaze[pos.first][pos.second].walkNorth)
+		if (myMaze[position.first][position.second].walkNorth)
 		{
-			if (myMaze[pos.first - 1][pos.second].isVisited)
+			if (myMaze[position.first - 1][position.second].isVisited)
 			{
 				return false;
 			}
@@ -328,16 +223,16 @@ bool labyrinth::canMoveNorth()
 		}
 		return false;
 	}
-	return myMaze[pos.first][pos.second].walkNorth && !myMaze[pos.first - 1][pos.second].isVisited;
+	return myMaze[position.first][position.second].walkNorth && !myMaze[position.first - 1][position.second].isVisited;
 }
 
-bool labyrinth::canMoveEast()
+bool labyrinth::canMoveEast(std::pair<size_t, size_t> position)
 {
-	if (myMaze[pos.first][pos.second].isOuterWall)
+	if (myMaze[position.first][position.second].isOuterWall)
 	{
-		if (myMaze[pos.first][pos.second].walkEast)
+		if (myMaze[position.first][position.second].walkEast)
 		{
-			if (myMaze[pos.first][pos.second + 1].isVisited)
+			if (myMaze[position.first][position.second + 1].isVisited)
 			{
 				return false;
 			}
@@ -345,16 +240,16 @@ bool labyrinth::canMoveEast()
 		}
 		return false;
 	}
-	return myMaze[pos.first][pos.second].walkEast && !myMaze[pos.first][pos.second + 1].isVisited;
+	return myMaze[position.first][position.second].walkEast && !myMaze[position.first][position.second + 1].isVisited;
 }
 
-bool labyrinth::canMoveWest()
+bool labyrinth::canMoveWest(std::pair<size_t, size_t> position)
 {
-	if (myMaze[pos.first][pos.second].isOuterWall)
+	if (myMaze[position.first][position.second].isOuterWall)
 	{
-		if (myMaze[pos.first][pos.second].walkWest)
+		if (myMaze[position.first][position.second].walkWest)
 		{
-			if (myMaze[pos.first][pos.second - 1].isVisited)
+			if (myMaze[position.first][position.second - 1].isVisited)
 			{
 				return false;
 			}
@@ -362,80 +257,89 @@ bool labyrinth::canMoveWest()
 		}
 		return false;
 	}
-	return myMaze[pos.first][pos.second].walkWest && !myMaze[pos.first][pos.second - 1].isVisited;
+	return myMaze[position.first][position.second].walkWest && !myMaze[position.first][position.second - 1].isVisited;
 }
 
 // Move around 
-void labyrinth::move(char direction)
+std::pair<size_t, size_t> labyrinth::move(char direction, std::pair<size_t, size_t> position)
 {
 	if (direction == 'S')
 	{
 		walkedPath.push_back(direction);
-		moveSouth();
+		position = moveSouth(position);
 	}
 	else if (direction == 'W')
 	{
 		walkedPath.push_back(direction);
-		moveWest();
+		position = moveWest(position);
 	}
 	else if (direction == 'E')
 	{
 		walkedPath.push_back(direction);
-		moveEast();
+		position = moveEast(position);
 	}
 	else if (direction == 'N')
 	{
 		walkedPath.push_back(direction);
-		moveNorth();
+		position = moveNorth(position);
 	}
+	return position;
 }
 
-void labyrinth::moveSouth()
+// Ta bort alla "flaggor?"
+std::pair<size_t, size_t> labyrinth::moveSouth(std::pair<size_t, size_t> position)
 {
-	myMaze[pos.first][pos.second].walkSouth = false;
-	myMaze[pos.first][pos.second].southFlag = " ";
-	myMaze[pos.first][pos.second].flag = "v";
-	myMaze[pos.first + 1][pos.second].isVisited = true;
-	myMaze[pos.first + 1][pos.second].walkNorth = false;
-	myMaze[pos.first + 1][pos.second].northFlag = " ";
-	pos.first += 1;
-	savedPosition.push(pos);
+	myMaze[position.first][position.second].walkSouth = false;
+	myMaze[position.first][position.second].southFlag = " ";
+	myMaze[position.first][position.second].flag = "v";
+	myMaze[position.first + 1][position.second].isVisited = true;
+	myMaze[position.first + 1][position.second].walkNorth = false;
+	myMaze[position.first + 1][position.second].northFlag = " ";
+	position.first += 1;
+	savedPosition.push(position);
+	return position;
 }
 
-void labyrinth::moveNorth()
+// Ta bort alla "flaggor?"
+std::pair<size_t, size_t> labyrinth::moveNorth(std::pair<size_t, size_t> position)
 {
-	myMaze[pos.first][pos.second].walkNorth = false;
-	myMaze[pos.first][pos.second].flag = "^";
-	myMaze[pos.first][pos.second].northFlag = " ";
-	myMaze[pos.first - 1][pos.second].isVisited = true;
-	myMaze[pos.first - 1][pos.second].walkSouth = false;
-	myMaze[pos.first - 1][pos.second].southFlag = " ";
-	pos.first -= 1;
-	savedPosition.push(pos);
+	myMaze[position.first][position.second].walkNorth = false;
+	myMaze[position.first][position.second].flag = "^";
+	myMaze[position.first][position.second].northFlag = " ";
+	myMaze[position.first - 1][position.second].isVisited = true;
+	myMaze[position.first - 1][position.second].walkSouth = false;
+	myMaze[position.first - 1][position.second].southFlag = " ";
+	position.first -= 1;
+	savedPosition.push(position);
+	return position;
 }
 
-void labyrinth::moveEast()
+// Ta bort alla "flaggor?"
+std::pair<size_t, size_t> labyrinth::moveEast(std::pair<size_t, size_t> position)
 {
-	myMaze[pos.first][pos.second].walkEast = false;
-	myMaze[pos.first][pos.second].eastFlag = " ";
-	myMaze[pos.first][pos.second].flag = ">";
-	myMaze[pos.first][pos.second + 1].isVisited = true;
-	myMaze[pos.first][pos.second + 1].walkWest = false;
-	myMaze[pos.first][pos.second + 1].westFlag = " ";
-	pos.second += 1;
-	savedPosition.push(pos);
+	myMaze[position.first][position.second].walkEast = false;
+	myMaze[position.first][position.second].eastFlag = " ";
+	myMaze[position.first][position.second].flag = ">";
+	myMaze[position.first][position.second + 1].isVisited = true;
+	myMaze[position.first][position.second + 1].walkWest = false;
+	myMaze[position.first][position.second + 1].westFlag = " ";
+	position.second += 1;
+	savedPosition.push(position);
+	return position;
 }
 
-void labyrinth::moveWest()
+// Ta bort alla "flaggor?"
+std::pair<size_t, size_t> labyrinth::moveWest(std::pair<size_t, size_t> position)
 {
-	myMaze[pos.first][pos.second].walkWest = false;
-	myMaze[pos.first][pos.second].westFlag = " ";
-	myMaze[pos.first][pos.second].flag = "<";
-	myMaze[pos.first][pos.second - 1].isVisited = true;
-	myMaze[pos.first][pos.second - 1].walkEast = false;
-	myMaze[pos.first][pos.second - 1].eastFlag = " ";
-	pos.second -= 1;
-	savedPosition.push(pos);
+	myMaze[position.first][position.second].walkWest = false;
+	myMaze[position.first][position.second].westFlag = " ";
+	myMaze[position.first][position.second].flag = "<";
+	myMaze[position.first][position.second - 1].isVisited = true;
+	myMaze[position.first][position.second - 1].walkEast = false;
+	myMaze[position.first][position.second - 1].eastFlag = " ";
+	position.second -= 1;
+	savedPosition.push(position);
+	return position;
 }
 
 // Randomizer
@@ -450,6 +354,7 @@ char labyrinth::randomizeDirection()
 // Disgusting mazeprinter
 void labyrinth::print()
 {
+	// Upper wall
 	for (int i = 0; i < (width * 2) + 1; i++)
 	{
 		if (i == 1)
@@ -495,6 +400,8 @@ void labyrinth::print()
 			std::cout << "\n";
 		}
 	}
+
+	//Lower wall
 	for (int i = 0; i < (width * 2) + 1; i++)
 	{
 		if (i == (width * 2) - 1)
@@ -540,7 +447,7 @@ void labyrinth::markOuterNodes()
 }
 
 // 2d container
-void labyrinth::createBoard()
+void labyrinth::createBoard(/*size_t width, size_t height */)
 {
 
 	while (myMaze.size() != 0)

@@ -2,7 +2,7 @@
 // Project Maze
 // Name: Gunnar Landström
 // Date: 2025-05-18
-// Grade: E+
+// Grade: E
 */
 
 #ifndef NODE_H
