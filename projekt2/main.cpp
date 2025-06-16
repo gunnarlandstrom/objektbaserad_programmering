@@ -23,10 +23,8 @@ void startMenu()
 	labyrinth maze;
 	bool wantsToPlay = true;
 	std::string userChoice;
-	std::cout << "This is a program that can create and solve labyrinths at the size of your choosing! \n"
+	std::cout << "This is a program that can create mazes at the size of your choosing! \n"
 		<< std::endl;
-	std::cout << "Here is an example of a maze that is 7x7!" << std::endl;
-	maze.print();
 	std::cout << "\n";
 	bool isSolved = false;
 
@@ -34,8 +32,8 @@ void startMenu()
 	while (wantsToPlay)
 	{
 		std::cout << "[1] - Generate a maze. \n";
-		std::cout << "[2] - Show solution. \n";
-		std::cout << "[3] - Exit program.\n";
+		//std::cout << "[2] - Show solution. \n";
+		std::cout << "[2] - Exit program.\n";
 		std::cout << "Input:> ";
 		try
 		{
@@ -51,11 +49,12 @@ void startMenu()
 				std::cout << "\n";
 				continue;
 			}
-
+			/*
 			case 2:
 			{
 				std::cout << "\n";
 				if (!isSolved) {
+					maze.markAsUnvisited();
 					maze.solveMaze();
 					isSolved = true;
 				}
@@ -63,8 +62,9 @@ void startMenu()
 				std::cout << "\n";
 				continue;
 			}
+			*/
 
-			case 3:
+			case 2:
 			{
 				exitProgram();
 			}

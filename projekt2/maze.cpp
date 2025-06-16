@@ -26,10 +26,9 @@ void labyrinth::initialize()
 {
 	createBoard();
 	markStart();
-	//markEnd();
 	markOuterNodes();
 	createMaze();
-	markAsUnvisited();
+	//markAsUnvisited();
 }
 
 
@@ -46,7 +45,7 @@ void labyrinth::setHeight(size_t height) {
 void labyrinth::createMaze()
 {
 	std::pair<size_t, size_t> position = { 0,0 };
-	
+
 	walkedPath.clear();
 	savedPosition.push(position);
 	while (savedPosition.size() != 0)
@@ -76,6 +75,7 @@ void exitProgram()
 	exit(0);
 }
 
+/*
 void labyrinth::solveMaze()
 {
 	std::pair<size_t, size_t> position = { 0,0 };
@@ -112,8 +112,8 @@ void labyrinth::solveMaze()
 			}
 		}
 	}
-	//drawPath('S');
 }
+*/
 
 // Revert steps taken
 std::pair<size_t, size_t> labyrinth::backtrack(std::pair<size_t, size_t> position)
@@ -128,9 +128,6 @@ std::pair<size_t, size_t> labyrinth::backtrack(std::pair<size_t, size_t> positio
 			position = savedPosition.top();
 		}
 	}
-	// Bools instead of flags?
-	myMaze[position.first][position.second].flag = " ";
-	myMaze[temp.first][temp.second].flag = " ";
 	return position;
 }
 
@@ -146,10 +143,6 @@ void labyrinth::markAsUnvisited()
 			myMaze[col][row].walkSouth = true;
 			myMaze[col][row].walkWest = true;
 			myMaze[col][row].walkEast = true;
-			if (myMaze[col][row].flag == "v" || myMaze[col][row].flag == "^" || myMaze[col][row].flag == "<" || myMaze[col][row].flag == ">")
-			{
-				myMaze[col][row].flag = " ";
-			}
 		}
 	}
 }
@@ -286,57 +279,41 @@ std::pair<size_t, size_t> labyrinth::move(char direction, std::pair<size_t, size
 	return position;
 }
 
-// Ta bort alla "flaggor?"
 std::pair<size_t, size_t> labyrinth::moveSouth(std::pair<size_t, size_t> position)
 {
 	myMaze[position.first][position.second].walkSouth = false;
-	myMaze[position.first][position.second].southFlag = " ";
-	myMaze[position.first][position.second].flag = "v";
 	myMaze[position.first + 1][position.second].isVisited = true;
 	myMaze[position.first + 1][position.second].walkNorth = false;
-	myMaze[position.first + 1][position.second].northFlag = " ";
 	position.first += 1;
 	savedPosition.push(position);
 	return position;
 }
 
-// Ta bort alla "flaggor?"
 std::pair<size_t, size_t> labyrinth::moveNorth(std::pair<size_t, size_t> position)
 {
 	myMaze[position.first][position.second].walkNorth = false;
-	myMaze[position.first][position.second].flag = "^";
-	myMaze[position.first][position.second].northFlag = " ";
 	myMaze[position.first - 1][position.second].isVisited = true;
 	myMaze[position.first - 1][position.second].walkSouth = false;
-	myMaze[position.first - 1][position.second].southFlag = " ";
 	position.first -= 1;
 	savedPosition.push(position);
 	return position;
 }
 
-// Ta bort alla "flaggor?"
 std::pair<size_t, size_t> labyrinth::moveEast(std::pair<size_t, size_t> position)
 {
 	myMaze[position.first][position.second].walkEast = false;
-	myMaze[position.first][position.second].eastFlag = " ";
-	myMaze[position.first][position.second].flag = ">";
 	myMaze[position.first][position.second + 1].isVisited = true;
 	myMaze[position.first][position.second + 1].walkWest = false;
-	myMaze[position.first][position.second + 1].westFlag = " ";
 	position.second += 1;
 	savedPosition.push(position);
 	return position;
 }
 
-// Ta bort alla "flaggor?"
 std::pair<size_t, size_t> labyrinth::moveWest(std::pair<size_t, size_t> position)
 {
 	myMaze[position.first][position.second].walkWest = false;
-	myMaze[position.first][position.second].westFlag = " ";
-	myMaze[position.first][position.second].flag = "<";
 	myMaze[position.first][position.second - 1].isVisited = true;
 	myMaze[position.first][position.second - 1].walkEast = false;
-	myMaze[position.first][position.second - 1].eastFlag = " ";
 	position.second -= 1;
 	savedPosition.push(position);
 	return position;
@@ -370,16 +347,17 @@ void labyrinth::print()
 		std::cout << "#";
 		for (int row = 0; row < this->width;)
 		{
-			if (col == width - 1)
-			{
-				std::cout << myMaze[col][row].flag << myMaze[col][row].eastFlag;
+			if (row == this->width - 1) {
+				std::cout << " " << "#";
 				row++;
-				continue;
 			}
-			else
-			{
-				std::cout << myMaze[col][row].flag << myMaze[col][row].eastFlag;
+			else if (myMaze[col][row].walkEast) {
 
+				std::cout << " " << "#";
+				row++;
+			}
+			else {
+				std::cout << " " << " ";
 				row++;
 			}
 		}
@@ -392,10 +370,13 @@ void labyrinth::print()
 				{
 					std::cout << "#";
 				}
-				if (row == this->width - 1)
-				{
+				if (myMaze[col][row].walkSouth) {
+
+					std::cout << "#" << "#";
 				}
-				std::cout << myMaze[col][row].southFlag << "#";
+				else {
+					std::cout << " " << "#";
+				}
 			}
 			std::cout << "\n";
 		}
@@ -447,7 +428,7 @@ void labyrinth::markOuterNodes()
 }
 
 // 2d container
-void labyrinth::createBoard(/*size_t width, size_t height */)
+void labyrinth::createBoard()
 {
 
 	while (myMaze.size() != 0)

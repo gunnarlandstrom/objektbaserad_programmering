@@ -23,13 +23,6 @@ struct node
     size_t x;
     size_t y;
 
-    // Flagmarkers
-    std::string flag;
-    std::string westFlag = "";
-    std::string eastFlag = "";
-    std::string northFlag = "";
-    std::string southFlag = "";
-
     // Moveable checks
     bool isVisited;
     bool isOuterWall;

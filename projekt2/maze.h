@@ -20,10 +20,10 @@ public:
 	labyrinth();
 	labyrinth(size_t width, size_t height);
 	void print();
-	void solveMaze();
 	void initialize();
 	void setWidth(size_t width);
 	void setHeight(size_t height);
+	void markAsUnvisited();
 
 private:
 	// Variables
@@ -36,7 +36,7 @@ private:
 	void markStart();
 	void markEnd();
 	void markOuterNodes();
-	void markAsUnvisited();
+	//void solveMaze();
 	std::pair<size_t, size_t> backtrack(std::pair<size_t, size_t> position);
 
 	// moveFunc
@@ -61,10 +61,10 @@ private:
 	// deque for drawing solution
 	std::deque<char> walkedPath;
 };
-	
-	void exitProgram();
-	void startMenu();
-	labyrinth wantsToGenerateMaze();
-	
+
+void exitProgram();
+void startMenu();
+labyrinth wantsToGenerateMaze();
+
 
 #endif
